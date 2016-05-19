@@ -39,10 +39,6 @@ public class Main {
 		final String tTfile="timeTableDB.xml";
 	    final UserController userController=new UserController(userfile);
 	    final TimeTableController tTController=new TimeTableController(tTfile);
-		java.awt.EventQueue.invokeLater(new Runnable() {
-	         public void run() {
-	            createAndShowUI(userController,tTController);
-	         }
-	      });
+		java.awt.EventQueue.invokeLater(() -> createAndShowUI(userController,tTController));
 	}
 }

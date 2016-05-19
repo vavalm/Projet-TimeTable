@@ -22,7 +22,7 @@ public class TimeTableController implements ITimeTableController{
 	 * Contient une instance de base de données d'emplois du temps
 	 * 
 	 */
-	TimeTableDB tTDB;
+	private TimeTableDB tTDB;
 	/**
 	 * Constructeur de controleur d'emplois du temps créant la base de données d'emplois du temps
 	 * 
@@ -30,8 +30,7 @@ public class TimeTableController implements ITimeTableController{
 	 * 		Fichier XML contenant la base de données d'emplois du temps
 	 */
 	public TimeTableController(String tTfile) {
-		TimeTableDB tTDB=new TimeTableDB(tTfile);
-		this.tTDB=tTDB;
+		this.tTDB= new TimeTableDB(tTfile);
 	}
 
 	@Override
