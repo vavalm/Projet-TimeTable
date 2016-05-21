@@ -1,5 +1,7 @@
 package userModel;
 
+import org.jdom2.Element;
+
 public class Admin extends User {
 	
 	private int adminID;
@@ -8,6 +10,22 @@ public class Admin extends User {
 		super(login, firstname, surname, pwd);
 		setAdminID(adminID);
 	}
+
+    static Admin initWithElement(Element adminNode) {
+        try {
+            String login = adminNode.getChildText("login");
+            String firstname =  adminNode.getChildText("firstname");
+            String surname = adminNode.getChildText("surname");
+            String pwd = adminNode.getChildText("pwd");
+            int adminId = Integer.parseInt(adminNode.getChildText("adminId"));
+
+            return new Admin(login, firstname, surname, pwd, adminId);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+	
 	
 	public void setAdminID(int adminID){
 		this.adminID = adminID;
