@@ -1,5 +1,7 @@
 package userModel;
 
+import org.jdom2.Element;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,16 @@ public class Group {
         this.composition = new ArrayList<Student>();
     }
 
+    static Group initWithElement(Element groupNode) {
+        try {
+            int groupId = Integer.parseInt(groupNode.getChildText("groupId"));
 
+            return new Group(groupId, 0);
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 
 

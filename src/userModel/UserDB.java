@@ -4,8 +4,10 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.*;
 import org.jdom2.internal.SystemProperty;
 
+import java.io.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Time;
@@ -36,6 +38,9 @@ public class UserDB {
 	private List<Admin> adminList = new ArrayList<Admin>();*/
 
 	private List<User> userList = new ArrayList<User>();
+	private List<Group> groupList = new ArrayList<Group>();
+	private Document parserDB;
+	private Element userDBNode;
 
 
 	/**
@@ -74,18 +79,12 @@ public class UserDB {
 
 
 	public void loadDB() {
-		Document parserDB;
+
 		SAXBuilder sxb = new SAXBuilder();
-		Element userDBNode;
 
 		try {
 			parserDB = sxb.build(new File(this.file));
 			userDBNode = parserDB.getRootElement();
-
-
-			// Get Groups
-
-
 
 			// Get Students
 			Element studentsNode = userDBNode.getChild("Students");
@@ -122,9 +121,6 @@ public class UserDB {
 
 			}
 
-
-
-
 			// Get Administrators
 
 			Element adminsNode = userDBNode.getChild("Administrators");
@@ -141,10 +137,33 @@ public class UserDB {
 
 			}
 
-			/*for(int j=0; j<userList.size();j++){
-				User admin = userList.get(j);
+			// Get Groups
+			Element groupsNode = userDBNode.getChild("Groups");
+			List groupNodes = groupsNode.getChildren("Group");
+			Iterator j = groupNodes.iterator();
+			while (j.hasNext()) {
+				Element groupNode = (Element) j.next();
+
+				Group newGroup = Group.initWithElement(groupNode);
+
+				if (newGroup != null) {
+					this.groupList.add(newGroup);
+
+				} else {
+					System.out.println("Group attribute missing");
+				}
+
+			}
+
+			/*for(int k=0; k<userList.size();k++){
+				User admin = userList.get(k);
 				System.out.println(admin.getLogin());
 			}*/
+
+			for(int k=0; k<groupList.size();k++){
+				Group admin = groupList.get(k);
+				System.out.println(admin.getGroupId());
+			}
 
 
 
@@ -154,9 +173,16 @@ public class UserDB {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-
 	}
 
+	public void saveDB() {
+		try{
+			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
+			sortie.output(parserDB, new FileOutputStream(this.file));
+		}
+		catch (java.io.IOException e){}
+	}
 }
+
+
 
