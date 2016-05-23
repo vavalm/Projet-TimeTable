@@ -31,9 +31,11 @@ public class UserDB {
 	 */
 	private String file;
 
-	private List<Student> studentList = new ArrayList<Student>();
+	/*private List<Student> studentList = new ArrayList<Student>();
 	private List<Teacher> teacherList = new ArrayList<Teacher>();
-	private List<Admin> adminList = new ArrayList<Admin>();
+	private List<Admin> adminList = new ArrayList<Admin>();*/
+
+	private List<User> userList = new ArrayList<User>();
 
 
 	/**
@@ -83,6 +85,8 @@ public class UserDB {
 
 			// Get Groups
 
+
+
 			// Get Students
 			Element studentsNode = userDBNode.getChild("Students");
 			List studentNodes = studentsNode.getChildren("Student");
@@ -93,7 +97,7 @@ public class UserDB {
 				Student newStudent = Student.initWithElement(studentNode);
 
 				if (newStudent != null) {
-					this.studentList.add(newStudent);
+					this.userList.add(newStudent);
 
 				} else {
 					System.out.println("Student attribute missing");
@@ -111,7 +115,7 @@ public class UserDB {
 				Element teacherNode = (Element) i.next();
 				Teacher newTeacher = Teacher.initWithElement(teacherNode);
 				if (newTeacher != null){
-					this.teacherList.add(newTeacher);
+					this.userList.add(newTeacher);
 				} else {
 					System.out.println("Teacher attribute missing");
 				}
@@ -130,19 +134,19 @@ public class UserDB {
 				Element adminNode = (Element) i.next();
 				Admin newAdmin = Admin.initWithElement(adminNode);
 				if (newAdmin != null){
-					this.adminList.add(newAdmin);
+					this.userList.add(newAdmin);
 				} else {
 					System.out.println("Admin attribute missing");
 				}
 
 			}
 
-
-
-			/*for(int j=0; j<adminList.size();j++){
-				Admin admin = adminList.get(j);
-				System.out.println(admin.getFirstname());
+			/*for(int j=0; j<userList.size();j++){
+				User admin = userList.get(j);
+				System.out.println(admin.getLogin());
 			}*/
+
+
 
 
 		} catch (JDOMException e) {
