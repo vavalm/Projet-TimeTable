@@ -160,10 +160,10 @@ public class UserDB {
 				System.out.println(admin.getLogin());
 			}*/
 
-			for(int k=0; k<groupList.size();k++){
+			/*for(int k=0; k<groupList.size();k++){
 				Group admin = groupList.get(k);
 				System.out.println(admin.getGroupId());
-			}
+			}*/
 
 
 
