@@ -24,7 +24,7 @@ public class Main {
 	 * @param tTController
 	 * 				Le controleur d'emplois du temps
 	 */
-	private static void createAndShowUI(UserController userController,TimeTableController tTController) {
+	private static void createAndShowUI(UserController userController, TimeTableController tTController) {
 		new MainFrame(userController,tTController);
 	}
 	/**
