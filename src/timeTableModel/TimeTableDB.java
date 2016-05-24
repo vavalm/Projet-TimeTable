@@ -1,15 +1,16 @@
 package timeTableModel;
 
+import node.Node;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.jdom2.internal.SystemProperty;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 
 //TODO Classe à modifier
-public class TimeTableDB {
+public class TimeTableDB extends Node {
 	/**
 	 * 
 	 * Le fichier contenant la base de données.
@@ -37,6 +38,7 @@ public class TimeTableDB {
     private Hashtable<Integer, Room> rooms;
 
     private Hashtable<Integer, TimeTable> timesTables;
+
 	/**
 	 * 
 	 * Constructeur de TimeTableDB. 
@@ -47,8 +49,8 @@ public class TimeTableDB {
 	public TimeTableDB(String file){
 		//TODO	À modifier
 		super();
-        this.rooms = new Hashtable<>();
-        this.timesTables = new Hashtable<>();
+        this.setRooms(new Hashtable<>());
+        this.setTimesTables(new Hashtable<>());
 		this.setFile(file);
         loadDB();
 	}
@@ -77,7 +79,9 @@ public class TimeTableDB {
         Element timeTablesDBNode;
 		try {
 			xmlDB = sxb.build(new File(this.file));
+
             timeTablesDBNode = xmlDB.getRootElement();
+            this.setNode(timeTablesDBNode);
 
             // Get rooms
             Element roomsNode = timeTablesDBNode.getChild("Rooms");
@@ -87,7 +91,7 @@ public class TimeTableDB {
                 Element roomNode = (Element)i.next();
                 Room newRoom = Room.initWithElement(roomNode);
                 if (newRoom != null) {
-                    rooms.put(newRoom.getRoomID(), newRoom);
+                    getRooms().put(newRoom.getRoomID(), newRoom);
                 } else {
                     System.out.println("Room attribute missing");
                 }
@@ -101,7 +105,7 @@ public class TimeTableDB {
                 Element timeTableNode = (Element)i.next();
                 TimeTable newTimeTable = TimeTable.initWithElement(timeTableNode);
                 if (newTimeTable != null) {
-                    this.timesTables.put(newTimeTable.getTimeTableID(), newTimeTable);
+                    this.getTimesTables().put(newTimeTable.getTimeTableID(), newTimeTable);
                 } else {
                     System.out.println("TimeTable attribute missing");
                 }
@@ -116,6 +120,42 @@ public class TimeTableDB {
     }
 	
 	public void saveDB() {
-		
+		try {
+            XMLOutputter exit = new XMLOutputter(Format.getPrettyFormat());
+            exit.output(this.getNode().getDocument(), new FileOutputStream(this.getFile()));
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
 	}
+
+    public Hashtable<Integer, Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(Hashtable<Integer, Room> rooms) {
+        this.rooms = rooms;
+    }
+
+    public Hashtable<Integer, TimeTable> getTimesTables() {
+        return timesTables;
+    }
+
+    public void setTimesTables(Hashtable<Integer, TimeTable> timesTables) {
+        this.timesTables = timesTables;
+    }
+
+    public boolean addRoom(int roomId, int capacity) {
+        try {
+            Room newRoom = Room.initWithoutElement(roomId, capacity, this.getNode().getChild("Rooms"));
+            if (newRoom == null) {
+                System.out.print("test");
+                return false;
+            } else {
+                this.getRooms().put(roomId, newRoom);
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
