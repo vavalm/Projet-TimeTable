@@ -1,6 +1,10 @@
 package userController;
 
-import userModel.UserDB;
+import userModel.*;
+
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Cette classe est le contrôleur d'utilisateurs que vous devez implémenter. 
  * Elle contient un attribut correspondant à la base de données utilisateurs que vous allez créer.
@@ -36,25 +40,76 @@ public class UserController implements IUserController
 
 	@Override
 	public String getUserName(String userLogin) {
-		// TODO Auto-generated method stub
+
+		List<User> userList = this.userDB.getUserList();
+
+		for(int i=0; i<userList.size(); i++){
+
+			if (userList.get(i).getLogin().equals(userLogin)){
+
+				return userList.get(i).getFirstname().concat(" ").concat(userList.get(i).getSurname());
+			}
+
+		}
 		return null;
 	}
 
 	@Override
 	public String getUserClass(String userLogin, String userPwd) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<User> userList = this.userDB.getUserList();
+		String Administrator = "Administrator";
+		String teacher = "Teacher";
+		String student = "Student";
+		String notfound = "Not found";
+
+		for(int i=0; i<userList.size(); i++){
+
+			if (userList.get(i).getLogin().equals(userLogin) && userList.get(i).getPassword().equals(userPwd)){
+				if(userList.get(i).getClass().equals(Admin.class)){
+					return Administrator;
+				}
+
+				if(userList.get(i).getClass().equals(Student.class)){
+					return student;
+				}
+
+				if(userList.get(i).getClass().equals(Teacher.class)){
+					return teacher;
+				}
+
+
+				}
+
+			}
+
+		return notfound;
 	}
 
 	@Override
 	public int getStudentGroup(String studentLogin) {
 		// TODO Auto-generated method stub
+		List<Group> groupList = this.userDB.getGroupList();
+
+		for(int i=0; i<groupList.size(); i++){
+			List<Student> studentfromGroup = groupList.get(i).getComposition();
+
+			for(int j=0; j<studentfromGroup.size();j++){
+				if(studentfromGroup.get(j).equals(studentLogin)){
+					return groupList.get(i).getGroupId();
+				}
+			}
+
+		}
+
 		return 0;
 	}
 
 	@Override
 	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
 			String pwd) {
+
+
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -93,6 +148,10 @@ public class UserController implements IUserController
 
 	@Override
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId) {
+
+
+	
+
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -129,12 +188,14 @@ public class UserController implements IUserController
 
 	@Override
 	public boolean loadDB() {
+		userDB.loadDB();
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean saveDB() {
+		userDB.saveDB();
 		// TODO Auto-generated method stub
 		return false;
 	}
