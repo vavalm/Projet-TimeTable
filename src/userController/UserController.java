@@ -5,6 +5,7 @@ import userModel.*;
 import java.util.Iterator;
 import java.util.List;
 
+
 /**
  * Cette classe est le contrôleur d'utilisateurs que vous devez implémenter. 
  * Elle contient un attribut correspondant à la base de données utilisateurs que vous allez créer.
@@ -109,6 +110,7 @@ public class UserController implements IUserController
 	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
 			String pwd) {
 
+		this.userDB.addAdmin(adminLogin,newAdminlogin,adminID,firstname,surname,pwd);
 
 		// TODO Auto-generated method stub
 		return false;

@@ -1,4 +1,5 @@
 package userModel;
+import node.Node;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -13,6 +14,8 @@ import java.io.IOException;
 import java.sql.Time;
 import java.util.*;
 
+
+
 /**
  * 
  * Cette classe gére la base de données d'utilisateurs. Elle doit permettre de sauvegarder et charger les utilisateurs et les groupes à partir d'un fichier XML. 
@@ -26,7 +29,7 @@ import java.util.*;
 
 //TODO Classe à modifier
 
-public class UserDB {
+public class UserDB extends Node{
 
 	/**
 	 * Le fichier contenant la base de données.
@@ -101,6 +104,7 @@ public class UserDB {
 		try {
 			parserDB = sxb.build(new File(this.file));
 			userDBNode = parserDB.getRootElement();
+			this.setNode(userDBNode);
 
 			// Get Students
 			Element studentsNode = userDBNode.getChild("Students");
@@ -198,7 +202,35 @@ public class UserDB {
 		}
 		catch (java.io.IOException e){}
 	}
+
+
+
+	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
+							String pwd) {
+
+
+
+
+
+		List<User> AllUsers = this.getUserList();
+		for(int i=0;i<AllUsers.size();i++){
+			if(AllUsers.get(i).getLogin().equals(newAdminlogin)){
+				System.out.println("ET BAH NON CA EXISTE DEJA");
+				return false;
+			}
+		}
+
+		Admin newAdmin = Admin.initWithoutElement(newAdminlogin,firstname,surname,pwd,adminID, this.getNode().getChild("Administrators"));
+
+		if (newAdmin == null){
+			return false;
+		} else {
+			this.getUserList().add(newAdmin);
+			return true;
+		}
+
+	}
+
+
 }
-
-
 
