@@ -1,13 +1,15 @@
 package timeTableModel;
 
 
+import node.Node;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class TimeTable {
+public class TimeTable extends Node {
     private int timeTableID;
     private ArrayList<Book> books;
 
@@ -16,7 +18,6 @@ public class TimeTable {
     }
 
     static TimeTable initWithElement(Element timeTableNode) {
-
         try {
             int timeTableId = Integer.parseInt(timeTableNode.getChildText("TimeTableId"));
             TimeTable newTimeTable = new TimeTable(timeTableId);
@@ -40,18 +41,42 @@ public class TimeTable {
         }
     }
 
+    static TimeTable initWithoutElement(int timeTableID, Element parentNode) {
+        Element timeTableNode = new Element("TimeTable");
+        parentNode.addContent(timeTableNode);
+
+        Element timeTableIDNode = new Element("TimeTableId");
+        timeTableIDNode.setText(Integer.toString(timeTableID));
+        timeTableNode.addContent(timeTableIDNode);
+
+        return TimeTable.initWithElement(timeTableNode);
+    }
+
     public void addBook(Book book) {
         if (!getBooks().contains(book)) {
             getBooks().add(book);
         }
     }
 
-    public void removeBook(Book book) {
+    public boolean addBooking(int bookingId, String login, Date dateBegin, Date dateEnd, int roomId) {
+        Book newBook = Book.initWithoutElement(bookingId, login, dateBegin, dateEnd, roomId, this.getNode());
+        if (newBook != null) {
+            this.addBook(newBook);
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public boolean removeBook(Book book) {
         for (int i = 0; i < getBooks().size(); i++) {
             if (getBooks().get(i) == book) {
                 getBooks().remove(i);
+                return true;
             }
         }
+        return false;
     }
 
     public int getTimeTableID() {
