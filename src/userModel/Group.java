@@ -10,6 +10,9 @@ public class Group extends Node {
 
     private int groupId;
     private int studentNumber;
+
+
+
     private List<Student> composition;
 
 
@@ -65,6 +68,14 @@ public class Group extends Node {
 
     public void setStudentNumber(int studentNumber) {
         this.studentNumber = studentNumber;
+    }
+
+    public List<Student> getComposition() {
+        return composition;
+    }
+
+    public void setComposition(List<Student> composition) {
+        this.composition = composition;
     }
 
 

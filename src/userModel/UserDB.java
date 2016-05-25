@@ -37,6 +37,22 @@ public class UserDB {
 	private List<Teacher> teacherList = new ArrayList<Teacher>();
 	private List<Admin> adminList = new ArrayList<Admin>();*/
 
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+
+	public List<Group> getGroupList() {
+		return groupList;
+	}
+
+	public void setGroupList(List<Group> groupList) {
+		this.groupList = groupList;
+	}
+
 	private List<User> userList = new ArrayList<User>();
 	private List<Group> groupList = new ArrayList<Group>();
 	private Document parserDB;
