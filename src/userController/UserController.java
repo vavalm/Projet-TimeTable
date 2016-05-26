@@ -112,13 +112,14 @@ public class UserController implements IUserController
 
 		this.userDB.addAdmin(adminLogin,newAdminlogin,adminID,firstname,surname,pwd);
 
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean addTeacher(String adminLogin, String newteacherLogin, int teacherID, String firstname,
 			String surname, String pwd) {
+
+		this.userDB.addTeacher(adminLogin,newteacherLogin,teacherID,firstname,surname,pwd);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -126,6 +127,7 @@ public class UserController implements IUserController
 	@Override
 	public boolean addStudent(String adminLogin, String newStudentLogin, int studentID, String firstname,
 			String surname, String pwd) {
+		this.userDB.addStudent(adminLogin,newStudentLogin,studentID,firstname,surname,pwd);
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -133,6 +135,8 @@ public class UserController implements IUserController
 	@Override
 	public boolean removeUser(String adminLogin, String userLogin) {
 		// TODO Auto-generated method stub
+		this.userDB.removeUser(adminLogin,userLogin);
+
 		return false;
 	}
 

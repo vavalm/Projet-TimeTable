@@ -50,6 +50,10 @@ public class Student extends User{
         studentIdNode.setText(Integer.toString(studentID));
         studentNode.addContent(studentIdNode);
 
+        Element groupIdNode = new Element("groupId");
+        groupIdNode.setText("-1");
+        studentNode.addContent(groupIdNode);
+
         return Student.initWithElement(studentNode);
     }
 

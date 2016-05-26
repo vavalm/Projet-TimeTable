@@ -23,12 +23,16 @@ public class Main {
 	public static void main(String[] args) {
 		final String file="usersDB.xml";
 		UserController UC=new UserController(file);
-		UC.addAdmin("su","KF",0001,"Kevin", "Flynn",  "@tron");
+		System.out.println(UC.getUserClass("MF","iknowall"));
+		System.out.println(UC.getUserName("KR"));
+		//UC.addAdmin("su","MC",0001,"MOMO", "BOUBOU",  "@tron");
 		UC.addAdmin("su","KR",0002,"Keanu", "Reeves",  "redpill");
-		UC.addTeacher("su","GS",1001,"Grand", "Schtroumpf",  "salsepareille");
+		/*UC.addTeacher("su","GS",1001,"Grand", "Schtroumpf",  "salsepareille");
 		UC.addTeacher("su","MF",1002,"Morgan", "Freeman",  "iknowall");
-		UC.addStudent("su","BS",2001,"Buffy", "Summers",  "stake");
-		UC.addStudent("su","NL",2002,"Nicolas", "Lepetit",  "prout");
+		UC.addTeacher("su","MB",1002,"MOHAMED", "BOUAZAOUI",  "iknowall");
+		UC.addStudent("su","BC",2001,"BAPTISTE", "CAMOMILLIE",  "stake");
+		UC.removeUser("su","KR");*/
+
 		UC.saveDB();
 	}
 }

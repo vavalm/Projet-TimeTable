@@ -232,5 +232,101 @@ public class UserDB extends Node{
 	}
 
 
+	public boolean addTeacher(String teacherLogin, String newTeacherlogin, int teacherID, String firstname, String surname,
+							String pwd) {
+
+
+
+
+
+		List<User> AllUsers = this.getUserList();
+		for(int i=0;i<AllUsers.size();i++){
+			if(AllUsers.get(i).getLogin().equals(newTeacherlogin)){
+				System.out.println("ET BAH NON Ce PROF EXISTE DEJA");
+				return false;
+			}
+		}
+
+		Teacher newTeacher = Teacher.initWithoutElement(newTeacherlogin,firstname,surname,pwd,teacherID, this.getNode().getChild("Teachers"));
+
+		if (newTeacher == null){
+			return false;
+		} else {
+			this.getUserList().add(newTeacher);
+			return true;
+		}
+
+	}
+
+
+	public boolean addStudent(String studentLogin, String newStudentlogin, int studentID, String firstname, String surname,
+							  String pwd) {
+
+
+
+
+
+		List<User> AllUsers = this.getUserList();
+		for(int i=0;i<AllUsers.size();i++){
+			if(AllUsers.get(i).getLogin().equals(newStudentlogin)){
+				System.out.println("ET BAH NON Cet ELV EXISTE DEJA");
+				return false;
+			}
+		}
+
+		Student newStudent = Student.initWithoutElement(newStudentlogin,firstname,surname,pwd,studentID, this.getNode().getChild("Students"));
+
+		if (newStudent == null){
+			return false;
+		} else {
+			this.getUserList().add(newStudent);
+			return true;
+		}
+
+	}
+
+
+	public boolean removeUser(String adminLogin, String userLogin) {
+		// TODO Auto-generated method stub
+		List<User> usersList = this.getUserList();
+
+		for(int i=0; i<usersList.size();i++){
+			if(usersList.get(i).getLogin().equals(userLogin)){
+
+				// Si suppression d'un Student, supprimer de son groupe
+				if(usersList.get(i).getClass().equals(Student.class)){
+					List<Group> groupsList = this.getGroupList();
+					for(int j=0; j<groupsList.size();j++){
+						List<Student> composition = groupsList.get(j).getComposition();
+						for(int k=0; k<composition.size(); k++){
+							if(composition.get(k).getLogin().equals(userLogin)){
+								composition.remove(k);
+							}
+						}
+					}
+					this.getNode().getChild("Students").removeContent(usersList.get(i).getNode());
+
+				}
+
+				else if(usersList.get(i).getClass().equals(Teacher.class)){
+					this.getNode().getChild("Teachers").removeContent(usersList.get(i).getNode());
+				}
+
+				else if(usersList.get(i).getClass().equals(Admin.class)){
+					this.getNode().getChild("Administrators").removeContent(usersList.get(i).getNode());
+				}
+
+
+				usersList.remove(i);
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+
+
 }
 
