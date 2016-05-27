@@ -72,7 +72,7 @@ public class TimeTableDB extends Node {
 		this.file = file;
 	}
 	
-	public void loadDB() {
+	public boolean loadDB() {
 		Document xmlDB;
 		SAXBuilder sxb = new SAXBuilder();
         Element timeTablesDBNode;
@@ -110,20 +110,26 @@ public class TimeTableDB extends Node {
                 }
             }
 
+            return true;
+
 		} catch (JDOMException e) {
             e.printStackTrace();
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
     }
 	
-	public void saveDB() {
+	public boolean saveDB() {
 		try {
             XMLOutputter exit = new XMLOutputter(Format.getPrettyFormat());
             exit.output(this.getNode().getDocument(), new FileOutputStream(this.getFile()));
+            return true;
         } catch (java.io.IOException e) {
             e.printStackTrace();
+            return false;
         }
 	}
 
@@ -153,7 +159,41 @@ public class TimeTableDB extends Node {
                 return true;
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean removeRoom(int roomId) {
+        Room room = this.getRooms().remove(roomId);
+        if (room == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public boolean addTimeTable(int timeTableId) {
+        try {
+            TimeTable newTimeTable = TimeTable.initWithoutElement(timeTableId, this.getNode().getChild("TimeTables"));
+            if (newTimeTable == null) {
+                return false;
+            } else {
+                this.getTimesTables().put(timeTableId, newTimeTable);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean removeTimeTable(int timeTableId) {
+        TimeTable timeTable = this.getTimesTables().remove(timeTableId);
+        if (timeTable == null) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

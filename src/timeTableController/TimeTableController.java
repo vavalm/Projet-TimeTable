@@ -130,12 +130,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean removeRoom(int roomId) {
-        Room room = this.tTDB.getRooms().remove(roomId);
-        if (room == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.tTDB.removeRoom(roomId);
     }
 
     @Override
@@ -150,13 +145,12 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean addTimeTable(int timeTableId) {
-        // TODO Auto-generated method stub
-        return false;
+        return this.tTDB.addTimeTable(timeTableId);
     }
 
     @Override
     public boolean removeTimeTable(int timeTableId) {
-        // TODO Auto-generated method stub
+        this.tTDB.removeTimeTable(timeTableId);
         return false;
     }
 
@@ -194,15 +188,11 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean saveDB() {
-        tTDB.saveDB();
-        return false;
+        return tTDB.saveDB();
     }
 
     @Override
     public boolean loadDB() {
-        tTDB.loadDB();
-        return false;
+        return tTDB.loadDB();
     }
-
-
 }
