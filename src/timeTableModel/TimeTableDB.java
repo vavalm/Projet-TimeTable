@@ -47,7 +47,6 @@ public class TimeTableDB extends Node {
 	 * 		Le nom du fichier qui contient la base de données.
 	 */
 	public TimeTableDB(String file){
-		//TODO	À modifier
 		super();
         this.setRooms(new Hashtable<>());
         this.setTimesTables(new Hashtable<>());
@@ -148,7 +147,6 @@ public class TimeTableDB extends Node {
         try {
             Room newRoom = Room.initWithoutElement(roomId, capacity, this.getNode().getChild("Rooms"));
             if (newRoom == null) {
-                System.out.print("test");
                 return false;
             } else {
                 this.getRooms().put(roomId, newRoom);

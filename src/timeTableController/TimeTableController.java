@@ -108,11 +108,11 @@ public class TimeTableController implements ITimeTableController {
     @Override
     public String[] booksIdToString(int timeTableId) {
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
-        Iterator<Book> elements = timeTable.getBooks().iterator();
+        Enumeration element = timeTable.getBooks().elements();
         String response[] = new String[timeTable.getBooks().size()];
         int i = 0;
-        while (elements.hasNext()) {
-            Book r = elements.next();
+        while (element.hasMoreElements()) {
+            Book r = (Book)element.nextElement();
             try {
                 response[i] = Integer.toString(r.getBookID());
                 i++;
@@ -158,7 +158,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean addBooking(int timeTableId, int bookingId, String login, Date dateBegin, Date dateEnd, int roomId) {
-        // TODO Auto-generated method stub
+
         return false;
     }
 

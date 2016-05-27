@@ -4,14 +4,11 @@ package timeTableModel;
 import node.Node;
 import org.jdom2.Element;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class TimeTable extends Node {
     private int timeTableID;
-    private ArrayList<Book> books;
+    private Hashtable<Integer, Book> books;
 
     public TimeTable(int timeTableID) {
         this.setTimeTableID(timeTableID);
@@ -21,7 +18,7 @@ public class TimeTable extends Node {
         try {
             int timeTableId = Integer.parseInt(timeTableNode.getChildText("TimeTableId"));
             TimeTable newTimeTable = new TimeTable(timeTableId);
-            newTimeTable.setBooks(new ArrayList<>());
+            newTimeTable.setBooks(new Hashtable<>());
             Element booksNode = timeTableNode.getChild("Books");
             List bookNodes = booksNode.getChildren("Book");
             Iterator i = bookNodes.iterator();
@@ -29,7 +26,9 @@ public class TimeTable extends Node {
                 Element bookNode = (Element)i.next();
                 Book newBook = Book.initWithElement(bookNode);
                 if (newBook != null) {
-                    newTimeTable.addBook(newBook);
+                    if (newTimeTable.addBooking(newBook) == false) {
+                        return null;
+                    }
                 } else {
                     System.out.println("Book attribute missing");
                 }
@@ -52,16 +51,19 @@ public class TimeTable extends Node {
         return TimeTable.initWithElement(timeTableNode);
     }
 
-    public void addBook(Book book) {
-        if (!getBooks().contains(book)) {
-            getBooks().add(book);
+    public boolean addBooking(Book newBook) {
+        if (this.books.containsKey(newBook.getBookID())) {
+            return false;
+        } else {
+            this.books.put(newBook.getBookID(), newBook);
+            return true;
         }
     }
 
     public boolean addBooking(int bookingId, String login, Date dateBegin, Date dateEnd, int roomId) {
         Book newBook = Book.initWithoutElement(bookingId, login, dateBegin, dateEnd, roomId, this.getNode());
         if (newBook != null) {
-            this.addBook(newBook);
+            this.addBooking(newBook);
             return true;
         } else {
             return false;
@@ -72,6 +74,7 @@ public class TimeTable extends Node {
     public boolean removeBook(Book book) {
         for (int i = 0; i < getBooks().size(); i++) {
             if (getBooks().get(i) == book) {
+                this.getNode().removeContent(getBooks().get(i).getNode());
                 getBooks().remove(i);
                 return true;
             }
@@ -87,11 +90,11 @@ public class TimeTable extends Node {
         this.timeTableID = timeTableID;
     }
 
-    public ArrayList<Book> getBooks() {
+    public Hashtable<Integer, Book> getBooks() {
         return books;
     }
 
-    public void setBooks(ArrayList<Book> books) {
+    public void setBooks(Hashtable<Integer, Book> books) {
         this.books = books;
     }
 }
