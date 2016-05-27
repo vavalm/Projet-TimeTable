@@ -76,7 +76,7 @@ public class TimeTableController implements ITimeTableController {
             try {
                 response[i] = "ID: ";
                 response[i] += Integer.toString(r.getRoomID());
-                response[i] += "\nCapacity: " + Integer.toString(r.getMaxStudents());
+                response[i] += " | Capacity: " + Integer.toString(r.getMaxStudents());
                 i++;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -140,7 +140,11 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public int getRoom(int timeTableId, int bookId) {
-        // TODO Auto-generated method stub
+        TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
+        Book book = timeTable.getBooks().get(bookId);
+        if (book != null) {
+            return book.getRoomId();
+        }
         return 0;
     }
 
@@ -176,8 +180,16 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public int getBookingsMaxId(int timeTableId) {
-        // TODO Auto-generated method stub
-        return 0;
+        TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
+        Enumeration element = timeTable.getBooks().elements();
+        int maxKey = 0;
+        while (element.hasMoreElements()) {
+            Book r = (Book)element.nextElement();
+            if (r.getBookID() > maxKey) {
+                maxKey = r.getBookID();
+            }
+        }
+        return maxKey;
     }
 
     @Override
