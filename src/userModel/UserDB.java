@@ -205,12 +205,7 @@ public class UserDB extends Node{
 
 
 
-	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
-							String pwd) {
-
-
-
-
+	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
 		for(int i=0;i<AllUsers.size();i++){
@@ -232,12 +227,7 @@ public class UserDB extends Node{
 	}
 
 
-	public boolean addTeacher(String teacherLogin, String newTeacherlogin, int teacherID, String firstname, String surname,
-							String pwd) {
-
-
-
-
+	public boolean addTeacher(String teacherLogin, String newTeacherlogin, int teacherID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
 		for(int i=0;i<AllUsers.size();i++){
@@ -259,12 +249,7 @@ public class UserDB extends Node{
 	}
 
 
-	public boolean addStudent(String studentLogin, String newStudentlogin, int studentID, String firstname, String surname,
-							  String pwd) {
-
-
-
-
+	public boolean addStudent(String studentLogin, String newStudentlogin, int studentID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
 		for(int i=0;i<AllUsers.size();i++){
@@ -283,6 +268,78 @@ public class UserDB extends Node{
 			return true;
 		}
 
+	}
+
+	public boolean addGroup(String adminLogin, int groupId) {
+
+		List<Group> AllGroups = this.getGroupList();
+		for(int i=0;i<AllGroups.size();i++){
+			if(AllGroups.get(i).getGroupId() == groupId){
+				System.out.println("ET BAH NON Ce GRP EXISTE DEJA");
+				return false;
+			}
+		}
+
+		Group newGroup = Group.initWithoutElement(groupId, this.getNode().getChild("Groups"));
+
+		if (newGroup == null){
+			return false;
+		} else {
+			this.getGroupList().add(newGroup);
+			return true;
+		}
+
+	}
+
+	//Marche pas D: (à moitié plutôt...)
+	public boolean removeGroup(String adminLogin, int groupId) {
+		// TODO Auto-generated method stub
+		List<Group> groupsList = this.getGroupList();
+		List<User> usersList = this.getUserList();
+
+		for(int i=0; i<groupsList.size();i++){
+			if(groupsList.get(i).getGroupId() == groupId){
+
+					//tous les étudiants qui étaient liés au groupe doivent avoir un groupId à -1
+						List<Student> studentfromGroup = groupsList.get(i).getComposition();
+
+						for(int j=0; j<studentfromGroup.size();j++){
+							//comment accéder au groupId d'un student?... °°
+							//this.getNode().getChild("Students").getChild("Student").getChild("GroupId").setText("-1");
+							//System.out.println("LOLOLO");
+						}
+
+
+
+					this.getNode().getChild("Groups").removeContent(groupsList.get(i).getNode());
+
+				groupsList.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//Méthode en test (Marche pas actuellement)
+	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId){
+		List<User> usersList = this.getUserList();
+
+		for(int i=0; i<usersList.size();i++){
+			if(usersList.get(i).getLogin().equals(studentLogin)){
+				if(usersList.get(i).getClass().equals(Student.class)) {
+					List<Group> groupsList = this.getGroupList();
+					for (int j = 0; j < groupsList.size(); j++) {
+						if (groupsList.get(j).getGroupId() == (groupId)) {
+							//Comment faire pour accéder au groupid du student et le modifier? :/
+
+						}
+					}
+				}
+
+				return true;
+			}
+		}
+		return false;
 	}
 
 
@@ -304,25 +361,21 @@ public class UserDB extends Node{
 							}
 						}
 					}
+
 					this.getNode().getChild("Students").removeContent(usersList.get(i).getNode());
 
-				}
+				}else if(usersList.get(i).getClass().equals(Teacher.class)){
 
-				else if(usersList.get(i).getClass().equals(Teacher.class)){
 					this.getNode().getChild("Teachers").removeContent(usersList.get(i).getNode());
-				}
 
-				else if(usersList.get(i).getClass().equals(Admin.class)){
+				}else if(usersList.get(i).getClass().equals(Admin.class)){
+
 					this.getNode().getChild("Administrators").removeContent(usersList.get(i).getNode());
 				}
-
-
 				usersList.remove(i);
 				return true;
 			}
-
 		}
-
 		return false;
 	}
 

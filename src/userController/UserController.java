@@ -143,22 +143,21 @@ public class UserController implements IUserController
 	@Override
 	public boolean addGroup(String adminLogin, int groupId) {
 		// TODO Auto-generated method stub
+		this.userDB.addGroup(adminLogin,groupId);
 		return false;
 	}
 
 	@Override
 	public boolean removeGroup(String adminLogin, int groupId) {
 		// TODO Auto-generated method stub
+		this.userDB.removeGroup(adminLogin,groupId);
 		return false;
 	}
 
 	@Override
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId) {
-
-
-	
-
 		// TODO Auto-generated method stub
+		this.userDB.associateStudToGroup(adminLogin, studentLogin, groupId);
 		return false;
 	}
 
