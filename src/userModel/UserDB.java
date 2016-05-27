@@ -304,15 +304,17 @@ public class UserDB extends Node{
 						List<Student> studentfromGroup = groupsList.get(i).getComposition();
 
 						for(int j=0; j<studentfromGroup.size();j++){
-							//comment accéder au groupId d'un student?... °°
-							//this.getNode().getChild("Students").getChild("Student").getChild("GroupId").setText("-1");
-							//System.out.println("LOLOLO");
+							if(studentfromGroup.get(j) != null) {
+								studentfromGroup.get(j).getNode().getChild("groupId").setText("-1");
+								studentfromGroup.remove(j);
+
+							}
+
 						}
 
 
 
-					this.getNode().getChild("Groups").removeContent(groupsList.get(i).getNode());
-
+				this.getNode().getChild("Groups").removeContent(groupsList.get(i).getNode());
 				groupsList.remove(i);
 				return true;
 			}
@@ -320,17 +322,29 @@ public class UserDB extends Node{
 		return false;
 	}
 
-	//Méthode en test (Marche pas actuellement)
+
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId){
 		List<User> usersList = this.getUserList();
 
+
 		for(int i=0; i<usersList.size();i++){
+
 			if(usersList.get(i).getLogin().equals(studentLogin)){
+
 				if(usersList.get(i).getClass().equals(Student.class)) {
+
 					List<Group> groupsList = this.getGroupList();
+
 					for (int j = 0; j < groupsList.size(); j++) {
 						if (groupsList.get(j).getGroupId() == (groupId)) {
-							//Comment faire pour accéder au groupid du student et le modifier? :/
+
+							List<Student> composition = groupsList.get(j).getComposition();
+
+							composition.add((Student)usersList.get(i));
+							groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()+1);
+							// Accède au node du student et modifie le champ groupId avec le nouveau
+							usersList.get(i).getNode().getChild("groupId").setText(Integer.toString(groupId));
+
 
 						}
 					}
@@ -358,11 +372,12 @@ public class UserDB extends Node{
 						for(int k=0; k<composition.size(); k++){
 							if(composition.get(k).getLogin().equals(userLogin)){
 								composition.remove(k);
+								groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()-1);
 							}
 						}
 					}
 
-					this.getNode().getChild("Students").removeContent(usersList.get(i).getNode());
+
 
 				}else if(usersList.get(i).getClass().equals(Teacher.class)){
 

@@ -27,10 +27,11 @@ public class Main {
 		System.out.println(UC.getUserName("KR"));
 		//UC.addAdmin("su","MC",0001,"MOMO", "BOUBOU",  "@tron");
 		UC.addAdmin("su","KR",0002,"Keanu", "Reeves",  "redpill");
-		UC.associateStudToGroup("su","BC",1);
-		System.out.println(UC.getStudentGroup("BC"));
 		UC.addGroup("su",2);
-		UC.removeGroup("su",2);
+		UC.associateStudToGroup("su","NL",2);
+		System.out.println(UC.getStudentGroup("BS"));
+
+		//UC.removeGroup("su",2);
 		/*UC.addTeacher("su","GS",1001,"Grand", "Schtroumpf",  "salsepareille");
 		UC.addTeacher("su","MF",1002,"Morgan", "Freeman",  "iknowall");
 		UC.addTeacher("su","MB",1002,"MOHAMED", "BOUAZAOUI",  "iknowall");

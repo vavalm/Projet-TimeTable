@@ -96,14 +96,14 @@ public class UserController implements IUserController
 			List<Student> studentfromGroup = groupList.get(i).getComposition();
 
 			for(int j=0; j<studentfromGroup.size();j++){
-				if(studentfromGroup.get(j).equals(studentLogin)){
+				if(studentfromGroup.get(j).getLogin().equals(studentLogin)){
 					return groupList.get(i).getGroupId();
 				}
 			}
 
 		}
 
-		return 0;
+		return -1;
 	}
 
 	@Override
