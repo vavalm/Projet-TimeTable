@@ -184,7 +184,18 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public void getBookingsDate(int timeTableId, Hashtable<Integer, Date> dateBegin, Hashtable<Integer, Date> dateEnd) {
-        // TODO Auto-generated method stub
+        TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
+        if (timeTable == null) {
+            System.out.println("TimeTable does not exist");
+            return;
+        }
+        Hashtable<Integer, Book> books = timeTable.getBooks();
+        Enumeration element = books.elements();
+        while (element.hasMoreElements()) {
+            Book book = (Book)element.nextElement();
+            dateBegin.put(book.getBookID(), book.getBeginDate());
+            dateEnd.put(book.getBookID(), book.getEndDate());
+        }
     }
 
     @Override
