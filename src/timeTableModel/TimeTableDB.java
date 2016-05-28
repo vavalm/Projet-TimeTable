@@ -165,6 +165,10 @@ public class TimeTableDB extends Node {
     }
 
     public boolean addRoom(int roomId, int capacity) {
+        if (this.getRooms().get(roomId) != null) {
+            System.out.println("RoomId already in use");
+            return false;
+        }
         try {
             Room newRoom = Room.initWithoutElement(roomId, capacity, this.getNode().getChild("Rooms"));
             if (newRoom == null) {
@@ -182,13 +186,20 @@ public class TimeTableDB extends Node {
     public boolean removeRoom(int roomId) {
         Room room = this.getRooms().remove(roomId);
         if (room == null) {
+            System.out.println("Room does not exist");
             return false;
         } else {
+            this.getNode().getChild("Rooms").removeContent(room.getNode());
+            this.saveDB();
             return true;
         }
     }
 
     public boolean addTimeTable(int timeTableId) {
+        if (this.getTimesTables().get(timeTableId) != null) {
+            System.out.println("TimeTableId is already in use");
+            return false;
+        }
         try {
             TimeTable newTimeTable = TimeTable.initWithoutElement(timeTableId, this.getNode().getChild("TimeTables"));
             if (newTimeTable == null) {
@@ -208,6 +219,7 @@ public class TimeTableDB extends Node {
         if (timeTable == null) {
             return false;
         } else {
+            this.getNode().getChild("TimeTables").removeContent(timeTable.getNode());
             return true;
         }
     }

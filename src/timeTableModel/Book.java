@@ -23,7 +23,7 @@ public class Book extends Node {
         this.setRoomId(roomId);
     }
 
-    static Book initWithElement(Element bookNode) {
+    public static Book initWithElement(Element bookNode) {
         try {
             int bookingId = Integer.parseInt(bookNode.getChildText("BookingId"));
             String login = bookNode.getChildText("Login");
@@ -37,7 +37,7 @@ public class Book extends Node {
         }
     }
 
-    static Book initWithoutElement(int bookID, String teacherLogin, Date beginDate, Date endDate, int roomId, Element parentNode) {
+    public static Book initWithoutElement(int bookID, String teacherLogin, Date beginDate, Date endDate, int roomId, Element parentNode) {
         Element bookNode = new Element("Book");
         parentNode.addContent(bookNode);
 

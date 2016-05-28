@@ -14,7 +14,7 @@ public class Room extends Node{
         this.setMaxStudents(maxStudents);
     }
 
-    static Room initWithElement(Element roomNode) {
+    public static Room initWithElement(Element roomNode) {
         try {
             int roomId = Integer.parseInt(roomNode.getChildText("RoomId"));
             int roomCapacity = Integer.parseInt(roomNode.getChildText("Capacity"));
@@ -25,7 +25,7 @@ public class Room extends Node{
         }
     }
 
-    static Room initWithoutElement(int roomID, int capacity, Element parentNode) {
+    public static Room initWithoutElement(int roomID, int capacity, Element parentNode) {
         Element roomNode = new Element("Room");
         parentNode.addContent(roomNode);
 

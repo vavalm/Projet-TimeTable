@@ -1,10 +1,11 @@
 package timeTableController;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 
+import org.jdom2.Element;
 import timeTableModel.Book;
 import timeTableModel.Room;
 import timeTableModel.TimeTable;
@@ -15,11 +16,10 @@ import timeTableModel.TimeTableDB;
  * Elle contient un attribut correspondant à la base de données d'emplois du temps que vous allez créer.
  * Elle contient toutes les fonctions de l'interface ITimeTableController que vous devez implémenter.
  *
- * @author Jose Mennesson (Mettre à jour)
- * @version 04/2016 (Mettre à jour)
+ * @author Valentin Maupin, Jose Mennesson & Quentin Solard
+ * @version 05/2016
  */
 
-//TODO Classe à modifier
 
 public class TimeTableController implements ITimeTableController {
 
@@ -150,26 +150,63 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean removeTimeTable(int timeTableId) {
-        this.tTDB.removeTimeTable(timeTableId);
-        return false;
+        return this.tTDB.removeTimeTable(timeTableId);
     }
 
     @Override
     public boolean addBooking(int timeTableId, int bookingId, String login, Date dateBegin, Date dateEnd, int roomId) {
+        TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
+        if (timeTable != null) {
+            try {
+                Element booksNode = timeTable.getNode().getChild("Books");
+                if (this.tTDB.getTimesTables().get(timeTableId).getBooks().get(bookingId) != null) {
+                    System.out.println("BookingId already in use");
+                    return false;
+                }
+                Book newBook = Book.initWithoutElement(bookingId, login, dateBegin, dateEnd, roomId, booksNode);
+                if (newBook != null) {
+                    this.tTDB.getTimesTables().get(timeTableId).getBooks().put(bookingId, newBook);
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                System.out.println("Missing Books element");
+                e.printStackTrace();
+                return false;
+            }
 
-        return false;
+        } else {
+            System.out.println("TimeTable not found");
+            return false;
+        }
     }
 
     @Override
     public void getBookingsDate(int timeTableId, Hashtable<Integer, Date> dateBegin, Hashtable<Integer, Date> dateEnd) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public boolean removeBook(int timeTableId, int bookId) {
-        // TODO Auto-generated method stub
-        return false;
+        TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
+        if (timeTable == null) {
+            System.out.println("TimeTable does not exist");
+            return false;
+        }
+        Book book = timeTable.getBooks().get(bookId);
+        if (book == null) {
+            System.out.println("Book doesn't exist");
+            return false;
+        }
+        timeTable.getBooks().remove(bookId);
+        try {
+            timeTable.getNode().getChild("Books").removeContent(book.getNode());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

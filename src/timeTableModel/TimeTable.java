@@ -14,7 +14,7 @@ public class TimeTable extends Node {
         this.setTimeTableID(timeTableID);
     }
 
-    static TimeTable initWithElement(Element timeTableNode) {
+    public static TimeTable initWithElement(Element timeTableNode) {
         try {
             int timeTableId = Integer.parseInt(timeTableNode.getChildText("TimeTableId"));
             TimeTable newTimeTable = new TimeTable(timeTableId);
@@ -40,7 +40,7 @@ public class TimeTable extends Node {
         }
     }
 
-    static TimeTable initWithoutElement(int timeTableID, Element parentNode) {
+    public static TimeTable initWithoutElement(int timeTableID, Element parentNode) {
         Element timeTableNode = new Element("TimeTable");
         parentNode.addContent(timeTableNode);
 
