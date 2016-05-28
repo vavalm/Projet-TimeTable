@@ -48,6 +48,9 @@ public class TimeTable extends Node {
         timeTableIDNode.setText(Integer.toString(timeTableID));
         timeTableNode.addContent(timeTableIDNode);
 
+        Element booksNode = new Element("Books");
+        timeTableIDNode.addContent(booksNode);
+
         return TimeTable.initWithElement(timeTableNode);
     }
 

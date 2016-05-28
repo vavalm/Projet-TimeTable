@@ -73,51 +73,66 @@ public class TimeTableDB extends Node {
 	}
 	
 	public boolean loadDB() {
-		Document xmlDB;
+
 		SAXBuilder sxb = new SAXBuilder();
-        Element timeTablesDBNode;
-		try {
-			xmlDB = sxb.build(new File(this.file));
+        File xmlFile = new File(this.file);
+        if (xmlFile.exists()) {
+            Element timeTablesDBNode;
+            try {
+                Document xmlDB;
+                xmlDB = sxb.build(xmlFile);
 
-            timeTablesDBNode = xmlDB.getRootElement();
-            this.setNode(timeTablesDBNode);
+                timeTablesDBNode = xmlDB.getRootElement();
+                this.setNode(timeTablesDBNode);
 
-            // Get rooms
-            Element roomsNode = timeTablesDBNode.getChild("Rooms");
-            List roomNodes = roomsNode.getChildren("Room");
-            Iterator i = roomNodes.iterator();
-            while (i.hasNext()) {
-                Element roomNode = (Element)i.next();
-                Room newRoom = Room.initWithElement(roomNode);
-                if (newRoom != null) {
-                    getRooms().put(newRoom.getRoomID(), newRoom);
-                } else {
-                    System.out.println("Room attribute missing");
+                // Get rooms
+                Element roomsNode = timeTablesDBNode.getChild("Rooms");
+                List roomNodes = roomsNode.getChildren("Room");
+                Iterator i = roomNodes.iterator();
+                while (i.hasNext()) {
+                    Element roomNode = (Element) i.next();
+                    Room newRoom = Room.initWithElement(roomNode);
+                    if (newRoom != null) {
+                        getRooms().put(newRoom.getRoomID(), newRoom);
+                    } else {
+                        System.out.println("Room attribute missing");
+                    }
                 }
-            }
 
-            // Get TimeTables
-            Element timeTablesNode = timeTablesDBNode.getChild("TimeTables");
-            List timeTableNodes = timeTablesNode.getChildren("TimeTable");
-            i = timeTableNodes.iterator();
-            while (i.hasNext()) {
-                Element timeTableNode = (Element)i.next();
-                TimeTable newTimeTable = TimeTable.initWithElement(timeTableNode);
-                if (newTimeTable != null) {
-                    this.getTimesTables().put(newTimeTable.getTimeTableID(), newTimeTable);
-                } else {
-                    System.out.println("TimeTable attribute missing");
+                // Get TimeTables
+                Element timeTablesNode = timeTablesDBNode.getChild("TimeTables");
+                List timeTableNodes = timeTablesNode.getChildren("TimeTable");
+                i = timeTableNodes.iterator();
+                while (i.hasNext()) {
+                    Element timeTableNode = (Element) i.next();
+                    TimeTable newTimeTable = TimeTable.initWithElement(timeTableNode);
+                    if (newTimeTable != null) {
+                        this.getTimesTables().put(newTimeTable.getTimeTableID(), newTimeTable);
+                    } else {
+                        System.out.println("TimeTable attribute missing");
+                    }
                 }
-            }
 
+                return true;
+
+            } catch (JDOMException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            Document xmlDB = new Document();
+            Element root = new Element("TimeTablesDB");
+            this.setNode(root);
+            Element roomsNode = new Element("Rooms");
+            root.addContent(roomsNode);
+            Element timeTablesNode = new Element("TimeTables");
+            root.addContent(timeTablesNode);
+            xmlDB.setRootElement(root);
+            this.saveDB();
             return true;
-
-		} catch (JDOMException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         }
 
     }
