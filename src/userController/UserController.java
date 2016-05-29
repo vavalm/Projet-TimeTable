@@ -242,7 +242,15 @@ public class UserController implements IUserController
 	@Override
 	public String[] groupsToString() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Group> groupsList = this.userDB.getGroupList();
+		String groups[] = new String[groupsList.size()];
+
+		for(int i = 0; i<groupsList.size(); i++){
+			groups[i] = "GroupId: " + groupsList.get(i).getGroupId();
+			groups[i] += " | NumberOfStudents: " + groupsList.get(i).getStudentNumber();
+		}
+
+		return groups;
 	}
 
 	@Override
