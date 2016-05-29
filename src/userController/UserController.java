@@ -164,7 +164,29 @@ public class UserController implements IUserController
 	@Override
 	public String[] usersToString() {
 		// TODO Auto-generated method stub
-		return null;
+		List<User> usersList = this.userDB.getUserList();
+		String users[] = new String[usersList.size()];
+
+		for(int i = 0; i<usersList.size(); i++){
+			if(usersList.get(i).getClass().equals(Student.class)){
+				users[i] ="Student | Login: ";
+			}else if(usersList.get(i).getClass().equals(Teacher.class)){
+				users[i] = "Teacher | Login: ";
+			}else if(usersList.get(i).getClass().equals(Admin.class)){
+				users[i] = "Admin | Login: ";
+			}
+
+			users[i] += usersList.get(i).getLogin();
+			users[i] += " | Firstname: " + usersList.get(i).getFirstname();
+			users[i] += " | Surname: " + usersList.get(i).getSurname();
+			users[i] += " | Password: " + usersList.get(i).getPassword();
+
+			if(usersList.get(i).getClass().equals(Student.class)){
+				users[i] += " | Group:" + getStudentGroup(usersList.get(i).getLogin());
+			}
+		}
+
+		return users;
 	}
 
 	@Override
