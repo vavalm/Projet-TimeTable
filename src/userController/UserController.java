@@ -109,56 +109,46 @@ public class UserController implements IUserController
 	@Override
 	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
 			String pwd) {
-
-		this.userDB.addAdmin(adminLogin,newAdminlogin,adminID,firstname,surname,pwd);
-
-		return false;
+		// TODO Auto-generated method stub
+		return this.userDB.addAdmin(adminLogin,newAdminlogin,adminID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean addTeacher(String adminLogin, String newteacherLogin, int teacherID, String firstname,
 			String surname, String pwd) {
-
-		this.userDB.addTeacher(adminLogin,newteacherLogin,teacherID,firstname,surname,pwd);
 		// TODO Auto-generated method stub
-		return false;
+		return this.userDB.addTeacher(adminLogin,newteacherLogin,teacherID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean addStudent(String adminLogin, String newStudentLogin, int studentID, String firstname,
 			String surname, String pwd) {
-		this.userDB.addStudent(adminLogin,newStudentLogin,studentID,firstname,surname,pwd);
 		// TODO Auto-generated method stub
-		return false;
+		return this.userDB.addStudent(adminLogin,newStudentLogin,studentID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean removeUser(String adminLogin, String userLogin) {
 		// TODO Auto-generated method stub
-		this.userDB.removeUser(adminLogin,userLogin);
-
-		return false;
+		return this.userDB.removeUser(adminLogin,userLogin);
 	}
 
 	@Override
 	public boolean addGroup(String adminLogin, int groupId) {
 		// TODO Auto-generated method stub
-		this.userDB.addGroup(adminLogin,groupId);
-		return false;
+		return this.userDB.addGroup(adminLogin,groupId);
 	}
 
 	@Override
 	public boolean removeGroup(String adminLogin, int groupId) {
 		// TODO Auto-generated method stub
-		this.userDB.removeGroup(adminLogin,groupId);
-		return false;
+		return this.userDB.removeGroup(adminLogin,groupId);
 	}
 
 	@Override
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId) {
 		// TODO Auto-generated method stub
-		this.userDB.associateStudToGroup(adminLogin, studentLogin, groupId);
-		return false;
+		return this.userDB.associateStudToGroup(adminLogin, studentLogin, groupId);
 	}
 
 	@Override
