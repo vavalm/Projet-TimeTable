@@ -6,12 +6,10 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.*;
-import org.jdom2.internal.SystemProperty;
 
 import java.io.*;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Time;
 import java.util.*;
 
 
@@ -70,10 +68,10 @@ public class UserDB extends Node{
 	 * @param file Le nom du fichier qui contient la base de données.
 	 */
 	public UserDB(String file) {
-		//TODO Fonction à modifier
 		super();
 		this.setFile(file);
 		loadDB();
+
 	}
 
 	/**
@@ -100,105 +98,114 @@ public class UserDB extends Node{
 	public void loadDB() {
 
 		SAXBuilder sxb = new SAXBuilder();
+		File xmlFile = new File(this.file);
 
-		try {
-			parserDB = sxb.build(new File(this.file));
-			userDBNode = parserDB.getRootElement();
-			this.setNode(userDBNode);
+		if(xmlFile.exists()) {
+			try {
+				Document parserDB;
+				parserDB = sxb.build(xmlFile);
+				userDBNode = parserDB.getRootElement();
+				this.setNode(userDBNode);
 
-			// Get Students
-			Element studentsNode = userDBNode.getChild("Students");
-			List studentNodes = studentsNode.getChildren("Student");
-			Iterator i = studentNodes.iterator();
-			while (i.hasNext()) {
-				Element studentNode = (Element) i.next();
+				// Get Students
+				Element studentsNode = userDBNode.getChild("Students");
+				List studentNodes = studentsNode.getChildren("Student");
+				Iterator i = studentNodes.iterator();
+				while (i.hasNext()) {
+					Element studentNode = (Element) i.next();
 
-				Student newStudent = Student.initWithElement(studentNode);
+					Student newStudent = Student.initWithElement(studentNode);
 
-				if (newStudent != null) {
-					this.userList.add(newStudent);
+					if (newStudent != null) {
+						this.userList.add(newStudent);
 
-				} else {
-					System.out.println("Student attribute missing");
+					} else {
+						System.out.println("Student attribute missing");
+					}
+
 				}
 
-			}
 
+				// Get Teachers
 
-			// Get Teachers
+				Element teachersNode = userDBNode.getChild("Teachers");
+				List teacherNodes = teachersNode.getChildren("Teacher");
+				i = teacherNodes.iterator();
+				while (i.hasNext()) {
+					Element teacherNode = (Element) i.next();
+					Teacher newTeacher = Teacher.initWithElement(teacherNode);
+					if (newTeacher != null) {
+						this.userList.add(newTeacher);
+					} else {
+						System.out.println("Teacher attribute missing");
+					}
 
-			Element teachersNode = userDBNode.getChild("Teachers");
-			List teacherNodes = teachersNode.getChildren("Teacher");
-			i = teacherNodes.iterator();
-			while (i.hasNext()){
-				Element teacherNode = (Element) i.next();
-				Teacher newTeacher = Teacher.initWithElement(teacherNode);
-				if (newTeacher != null){
-					this.userList.add(newTeacher);
-				} else {
-					System.out.println("Teacher attribute missing");
 				}
 
-			}
+				// Get Administrators
 
-			// Get Administrators
+				Element adminsNode = userDBNode.getChild("Administrators");
+				List adminNodes = adminsNode.getChildren("Administrator");
+				i = adminNodes.iterator();
+				while (i.hasNext()) {
+					Element adminNode = (Element) i.next();
+					Admin newAdmin = Admin.initWithElement(adminNode);
+					if (newAdmin != null) {
+						this.userList.add(newAdmin);
+					} else {
+						System.out.println("Admin attribute missing");
+					}
 
-			Element adminsNode = userDBNode.getChild("Administrators");
-			List adminNodes = adminsNode.getChildren("Administrator");
-			i = adminNodes.iterator();
-			while (i.hasNext()){
-				Element adminNode = (Element) i.next();
-				Admin newAdmin = Admin.initWithElement(adminNode);
-				if (newAdmin != null){
-					this.userList.add(newAdmin);
-				} else {
-					System.out.println("Admin attribute missing");
 				}
 
-			}
+				// Get Groups
+				Element groupsNode = userDBNode.getChild("Groups");
+				List groupNodes = groupsNode.getChildren("Group");
+				Iterator j = groupNodes.iterator();
+				while (j.hasNext()) {
+					Element groupNode = (Element) j.next();
 
-			// Get Groups
-			Element groupsNode = userDBNode.getChild("Groups");
-			List groupNodes = groupsNode.getChildren("Group");
-			Iterator j = groupNodes.iterator();
-			while (j.hasNext()) {
-				Element groupNode = (Element) j.next();
+					Group newGroup = Group.initWithElement(groupNode);
 
-				Group newGroup = Group.initWithElement(groupNode);
+					if (newGroup != null) {
+						this.groupList.add(newGroup);
 
-				if (newGroup != null) {
-					this.groupList.add(newGroup);
+					} else {
+						System.out.println("Group attribute missing");
+					}
 
-				} else {
-					System.out.println("Group attribute missing");
 				}
 
+
+			} catch (JDOMException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 
-			/*for(int k=0; k<userList.size();k++){
-				User admin = userList.get(k);
-				System.out.println(admin.getLogin());
-			}*/
+		} else {
+			Document xmlDB = new Document();
+			Element root = new Element("UsersDB");
+			this.setNode(root);
+			Element groupsNode = new Element("Groups");
+			root.addContent(groupsNode);
+			Element adminsNode = new Element("Administrators");
+			root.addContent(adminsNode);
+			Element studentsNode = new Element("Students");
+			root.addContent(studentsNode);
+			Element teachersNode = new Element("Teachers");
+			root.addContent(teachersNode);
+			xmlDB.setRootElement(root);
 
-			/*for(int k=0; k<groupList.size();k++){
-				Group admin = groupList.get(k);
-				System.out.println(admin.getGroupId());
-			}*/
-
-
-
-
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+			addAdmin("su","su",42,"super","user","1234");
+			this.saveDB();
 		}
 	}
 
 	public void saveDB() {
 		try{
 			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
-			sortie.output(parserDB, new FileOutputStream(this.file));
+			sortie.output(this.getNode().getDocument(), new FileOutputStream(this.getFile()));
 		}
 		catch (java.io.IOException e){}
 	}
@@ -210,7 +217,6 @@ public class UserDB extends Node{
 		List<User> AllUsers = this.getUserList();
 		for(int i=0;i<AllUsers.size();i++){
 			if(AllUsers.get(i).getLogin().equals(newAdminlogin)){
-				System.out.println("ET BAH NON CA EXISTE DEJA");
 				return false;
 			}
 		}
@@ -221,6 +227,7 @@ public class UserDB extends Node{
 			return false;
 		} else {
 			this.getUserList().add(newAdmin);
+			this.saveDB();
 			return true;
 		}
 
@@ -232,7 +239,6 @@ public class UserDB extends Node{
 		List<User> AllUsers = this.getUserList();
 		for(int i=0;i<AllUsers.size();i++){
 			if(AllUsers.get(i).getLogin().equals(newTeacherlogin)){
-				System.out.println("ET BAH NON Ce PROF EXISTE DEJA");
 				return false;
 			}
 		}
@@ -243,6 +249,7 @@ public class UserDB extends Node{
 			return false;
 		} else {
 			this.getUserList().add(newTeacher);
+			this.saveDB();
 			return true;
 		}
 
@@ -265,6 +272,7 @@ public class UserDB extends Node{
 			return false;
 		} else {
 			this.getUserList().add(newStudent);
+			this.saveDB();
 			return true;
 		}
 
@@ -275,10 +283,10 @@ public class UserDB extends Node{
 		List<Group> AllGroups = this.getGroupList();
 		for(int i=0;i<AllGroups.size();i++){
 			if(AllGroups.get(i).getGroupId() == groupId){
-				System.out.println("ET BAH NON Ce GRP EXISTE DEJA");
 				return false;
 			}
 		}
+
 
 		Group newGroup = Group.initWithoutElement(groupId, this.getNode().getChild("Groups"));
 
@@ -286,12 +294,13 @@ public class UserDB extends Node{
 			return false;
 		} else {
 			this.getGroupList().add(newGroup);
+			this.saveDB();
 			return true;
 		}
 
 	}
 
-	//Marche pas D: (à moitié plutôt...)
+
 	public boolean removeGroup(String adminLogin, int groupId) {
 		// TODO Auto-generated method stub
 		List<Group> groupsList = this.getGroupList();
@@ -316,6 +325,7 @@ public class UserDB extends Node{
 
 				this.getNode().getChild("Groups").removeContent(groupsList.get(i).getNode());
 				groupsList.remove(i);
+				this.saveDB();
 				return true;
 			}
 		}
@@ -344,14 +354,17 @@ public class UserDB extends Node{
 							groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()+1);
 							// Accède au node du student et modifie le champ groupId avec le nouveau
 							usersList.get(i).getNode().getChild("groupId").setText(Integer.toString(groupId));
+							this.saveDB();
+							return true;
 
 
 						}
 					}
 				}
 
-				return true;
+
 			}
+
 		}
 		return false;
 	}
@@ -374,8 +387,11 @@ public class UserDB extends Node{
 								composition.remove(k);
 								groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()-1);
 							}
+
 						}
 					}
+
+					this.getNode().getChild("Students").removeContent(usersList.get(i).getNode());
 
 
 
@@ -388,6 +404,7 @@ public class UserDB extends Node{
 					this.getNode().getChild("Administrators").removeContent(usersList.get(i).getNode());
 				}
 				usersList.remove(i);
+				this.saveDB();
 				return true;
 			}
 		}

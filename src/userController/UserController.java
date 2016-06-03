@@ -206,10 +206,12 @@ public class UserController implements IUserController
 		}
 
 		String studentsLogin[] = new String[nbStudent];
+		nbStudent = 0;
 
 		for(i = 0; i<usersList.size(); i++){
 			if(usersList.get(i).getClass().equals(Student.class)){
-				studentsLogin[i] = usersList.get(i).getLogin();
+				studentsLogin[nbStudent] = usersList.get(i).getLogin();
+				nbStudent++;
 			}
 		}
 
