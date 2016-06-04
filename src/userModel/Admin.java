@@ -3,13 +3,43 @@ package userModel;
 import org.jdom2.Element;
 
 public class Admin extends User {
-	
+
+    /**
+     * Contient un identifiant d'administrateur
+     *
+     */
 	private int adminID;
-	
+
+    /**
+     * Constructeur d'un utilisateur administrateur
+     *
+     * @param login
+     * 		Login de l'administrateur
+     * @param firstname
+     * 		Prénom de l'administrateur
+     * @param surname
+     * 		Nom de l'administrateur
+     * @param pwd
+     * 		Mot de passe de l'administrateur
+     * @param adminID
+     * 		Identifiant de l'administrateur
+     * @param adminNode
+     * 		Element noeud associé à l'administrateur
+     *
+     */
+
 	public Admin(String login, String firstname, String surname, String pwd, int adminID, Element adminNode){
 		super(login, firstname, surname, pwd, adminNode);
 		setAdminID(adminID);
 	}
+
+    /**
+     * Fonction permettant de créer un nouvel objet administrateur à partir des éléments du noeud administrateur
+     * @param adminNode
+     * 		Element noeud associé à l'administrateur
+     * @return
+     * 		La nouvelle instance d'administrateur
+     */
 
     static Admin initWithElement(Element adminNode) {
         try {
@@ -25,6 +55,24 @@ public class Admin extends User {
             return null;
         }
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet administrateur à partir de paramètres choisis par l'utilisateur
+     * @param login
+     * 		Login de l'administrateur
+     * @param firstname
+     * 		Prénom de l'administrateur
+     * @param surname
+     * 		Nom de l'administrateur
+     * @param pwd
+     * 		Mot de passe de l'administrateur
+     * @param adminID
+     * 		Identifiant de l'administrateur
+     * @param parentNode
+     * 		Element noeud parent associé à l'administrateur
+     * @return
+     * 		La nouvelle instance d'administrateur
+     */
 
     static Admin initWithoutElement( String login, String firstname, String surname, String pwd, int adminID, Element parentNode) {
         Element adminNode = new Element("Administrator");
@@ -53,6 +101,11 @@ public class Admin extends User {
         return Admin.initWithElement(adminNode);
     }
 
+    /**
+     * Setter de l'ID de l'administrateur modifiant l'Element noeud correspondant
+     * @param adminID
+     * 		Nouvel identifiant de l'administrateur
+     */
     public void setAdminID(int adminID) {
         if (this.getNode() != null) {
             try {
@@ -63,7 +116,12 @@ public class Admin extends User {
         }
         this.adminID = adminID;
     }
-	
+
+    /**
+     * Getter de l'ID de l'administrateur
+     * @return
+     * 		L'ID de l'administrateur
+     */
 	public int getAdminID(){
 		return this.adminID;
 	}
