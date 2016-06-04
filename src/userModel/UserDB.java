@@ -25,8 +25,6 @@ import java.util.*;
  * 
  */
 
-//TODO Classe à modifier
-
 public class UserDB extends Node{
 
 	/**
@@ -322,7 +320,6 @@ public class UserDB extends Node{
 
 
 	public boolean removeGroup(String adminLogin, int groupId) {
-		// TODO Auto-generated method stub
 		List<Group> groupsList = this.getGroupList();
 		List<User> usersList = this.getUserList();
 
@@ -391,7 +388,6 @@ public class UserDB extends Node{
 
 
 	public boolean removeUser(String adminLogin, String userLogin) {
-		// TODO Auto-generated method stub
 		List<User> usersList = this.getUserList();
 
 		for(int i=0; i<usersList.size();i++){

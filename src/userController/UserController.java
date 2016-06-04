@@ -16,8 +16,6 @@ import java.util.List;
  * 
  */
 
-//TODO Classe à modifier
-
 public class UserController implements IUserController
 {
 	
@@ -89,7 +87,6 @@ public class UserController implements IUserController
 
 	@Override
 	public int getStudentGroup(String studentLogin) {
-		// TODO Auto-generated method stub
 		List<Group> groupList = this.userDB.getGroupList();
 
 		for(int i=0; i<groupList.size(); i++){
@@ -109,51 +106,43 @@ public class UserController implements IUserController
 	@Override
 	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname,
 			String pwd) {
-		// TODO Auto-generated method stub
 		return this.userDB.addAdmin(adminLogin,newAdminlogin,adminID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean addTeacher(String adminLogin, String newteacherLogin, int teacherID, String firstname,
 			String surname, String pwd) {
-		// TODO Auto-generated method stub
 		return this.userDB.addTeacher(adminLogin,newteacherLogin,teacherID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean addStudent(String adminLogin, String newStudentLogin, int studentID, String firstname,
 			String surname, String pwd) {
-		// TODO Auto-generated method stub
 		return this.userDB.addStudent(adminLogin,newStudentLogin,studentID,firstname,surname,pwd);
 	}
 
 	@Override
 	public boolean removeUser(String adminLogin, String userLogin) {
-		// TODO Auto-generated method stub
 		return this.userDB.removeUser(adminLogin,userLogin);
 	}
 
 	@Override
 	public boolean addGroup(String adminLogin, int groupId) {
-		// TODO Auto-generated method stub
 		return this.userDB.addGroup(adminLogin,groupId);
 	}
 
 	@Override
 	public boolean removeGroup(String adminLogin, int groupId) {
-		// TODO Auto-generated method stub
 		return this.userDB.removeGroup(adminLogin,groupId);
 	}
 
 	@Override
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId) {
-		// TODO Auto-generated method stub
 		return this.userDB.associateStudToGroup(adminLogin, studentLogin, groupId);
 	}
 
 	@Override
 	public String[] usersToString() {
-		// TODO Auto-generated method stub
 		List<User> usersList = this.userDB.getUserList();
 		String users[] = new String[usersList.size()];
 
@@ -181,7 +170,6 @@ public class UserController implements IUserController
 
 	@Override
 	public String[] usersLoginToString() {
-		// TODO Auto-generated method stub
 		List<User> usersList = this.userDB.getUserList();
 		String usersLogin[] = new String[usersList.size()];
 
@@ -194,7 +182,6 @@ public class UserController implements IUserController
 
 	@Override
 	public String[] studentsLoginToString() {
-		// TODO Auto-generated method stub
 		List<User> usersList = this.userDB.getUserList();
 		int nbStudent = 0;
 		int i;
@@ -220,7 +207,6 @@ public class UserController implements IUserController
 
 	@Override
 	public String[] groupsIdToString() {
-		// TODO Auto-generated method stub
 		List<Group> groupsList = this.userDB.getGroupList();
 		String groupsId[] = new String[groupsList.size()];
 
@@ -233,7 +219,6 @@ public class UserController implements IUserController
 
 	@Override
 	public String[] groupsToString() {
-		// TODO Auto-generated method stub
 		List<Group> groupsList = this.userDB.getGroupList();
 		String groups[] = new String[groupsList.size()];
 
@@ -248,14 +233,12 @@ public class UserController implements IUserController
 	@Override
 	public boolean loadDB() {
 		userDB.loadDB();
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean saveDB() {
 		userDB.saveDB();
-		// TODO Auto-generated method stub
 		return false;
 	}
 
