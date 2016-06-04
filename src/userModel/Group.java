@@ -8,14 +8,25 @@ import java.util.List;
 
 public class Group extends Node {
 
+    /**
+     * Contient un identifiant de groupe, un nombre d'étudiants ainsi que la liste d'étudiants composant le groupe
+     *
+     */
     private int groupId;
     private int studentNumber;
-
-
-
     private List<Student> composition;
 
-
+    /**
+     * Constructeur d'un groupe
+     *
+     * @param groupId
+     * 		Identifiant du groupe
+     * @param studentNumber
+     * 		Nombre d'étudiants dans le groupe
+     * @param groupNode
+     * 		Element noeud associé au groupe
+     *
+     */
 
     public Group(int groupId, int studentNumber, Element groupNode){
         super(groupNode);
@@ -23,6 +34,14 @@ public class Group extends Node {
         this.studentNumber = studentNumber;
         this.composition = new ArrayList<Student>();
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet groupe à partir des éléments du noeud groupe
+     * @param groupNode
+     * 		Element noeud associé au groupe
+     * @return
+     * 		La nouvelle instance de groupe
+     */
 
     static Group initWithElement(Element groupNode) {
         try {
@@ -35,6 +54,16 @@ public class Group extends Node {
         }
     }
 
+    /**
+     * Fonction permettant de créer un nouvel objet groupe à partir de paramètres choisis par l'utilisateur
+     * @param groupId
+     * 		Identifiant du groupe
+     * @param parentNode
+     * 		Element noeud parent associé au groupe
+     * @return
+     * 		La nouvelle instance de groupe
+     */
+
     static Group initWithoutElement(int groupId, Element parentNode) {
         Element groupNode = new Element("Group");
         parentNode.addContent(groupNode);
@@ -46,10 +75,21 @@ public class Group extends Node {
         return Group.initWithElement(groupNode);
     }
 
+    /**
+     * Getter de l'identifiant du groupe
+     * @return
+     * 		L'identifiant du groupe
+     */
 
     public int getGroupId() {
         return groupId;
     }
+
+    /**
+     * Setter de l'identifiant du groupe modifiant l'Element noeud correspondant
+     * @param groupId
+     * 		Nouvel identifiant du groupe
+     */
 
     public void setGroupId(int groupId) {
         if (this.getNode() != null) {
@@ -62,17 +102,41 @@ public class Group extends Node {
         this.groupId = groupId;
     }
 
+    /**
+     * Getter du nombre d'étudiants dans le groupe
+     * @return
+     * 		Nombre d'étudiants dans le groupe
+     */
+
     public int getStudentNumber() {
         return studentNumber;
     }
+
+    /**
+     * Setter du nombre d'étudiants dans le groupe modifiant l'Element noeud correspondant
+     * @param studentNumber
+     * 		Nouveau nombre d'étudiants dans le groupe
+     */
 
     public void setStudentNumber(int studentNumber) {
         this.studentNumber = studentNumber;
     }
 
+    /**
+     * Getter de la liste d'étudiants composant le groupe
+     * @return
+     * 		La liste d'étudiants qui compose le groupe
+     */
+
     public List<Student> getComposition() {
         return composition;
     }
+
+    /**
+     * Setter de la liste d'étudiants composant le groupe modifiant l'Element noeud correspondant
+     * @param composition
+     * 		Nouvelle liste d'étudiants composant le groupe
+     */
 
     public void setComposition(List<Student> composition) {
         this.composition = composition;

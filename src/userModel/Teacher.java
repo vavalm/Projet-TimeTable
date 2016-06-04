@@ -3,12 +3,45 @@ package userModel;
 import org.jdom2.Element;
 
 public class Teacher extends User{
+
+    /**
+     * Contient un identifiant de professeur
+     *
+     */
+
     private int teacherID;
+
+    /**
+     * Constructeur d'un utilisateur professeur
+     *
+     * @param login
+     * 		Login du professeur
+     * @param firstname
+     * 		Prénom du professeur
+     * @param surname
+     * 		Nom du professeur
+     * @param pwd
+     * 		Mot de passe du professeur
+     * @param teacherID
+     * 		Identifiant du professeur
+     * @param teacherNode
+     * 		Element noeud associé au professeur
+     *
+     */
 
     public Teacher(String login, String firstname, String surname, String pwd, int teacherID, Element teacherNode){
         super(login, firstname, surname, pwd, teacherNode);
         setTeacherID(teacherID);
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet professeur à partir des éléments du noeud professeur
+     * @param teacherNode
+     * 		Element noeud associé au professeur
+     * @return
+     * 		La nouvelle instance du professeur
+     */
+
 
     static Teacher initWithElement(Element teacherNode) {
         try {
@@ -24,6 +57,24 @@ public class Teacher extends User{
             return null;
         }
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet professeur à partir de paramètres choisis par l'utilisateur
+     * @param login
+     * 		Login du professeur
+     * @param firstname
+     * 		Prénom du professeur
+     * @param surname
+     * 		Nom du professeur
+     * @param pwd
+     * 		Mot de passe du professeur
+     * @param teacherID
+     * 		Identifiant du professeur
+     * @param parentNode
+     * 		Element noeud parent associé au professeur
+     * @return
+     * 		La nouvelle instance du professeur
+     */
 
     static Teacher initWithoutElement( String login, String firstname, String surname, String pwd, int teacherID, Element parentNode) {
         Element teacherNode = new Element("Teacher");
@@ -52,6 +103,12 @@ public class Teacher extends User{
         return Teacher.initWithElement(teacherNode);
     }
 
+    /**
+     * Setter de l'identifiant du professeur modifiant l'Element noeud correspondant
+     * @param teacherID
+     * 		Nouvel identifiant du professeur
+     */
+
     public void setTeacherID(int teacherID) {
         if (this.getNode() != null) {
             try {
@@ -62,6 +119,12 @@ public class Teacher extends User{
         }
         this.teacherID = teacherID;
     }
+
+    /**
+     * Getter de l'identifiant du professeur
+     * @return
+     * 		L'identifiant du professeur
+     */
 
     public int getTeacherID(){
         return this.teacherID;

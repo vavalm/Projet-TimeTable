@@ -34,26 +34,9 @@ public class UserDB extends Node{
 	 */
 	private String file;
 
-	/*private List<Student> studentList = new ArrayList<Student>();
-	private List<Teacher> teacherList = new ArrayList<Teacher>();
-	private List<Admin> adminList = new ArrayList<Admin>();*/
-
-	public List<User> getUserList() {
-		return userList;
-	}
-
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
-
-	public List<Group> getGroupList() {
-		return groupList;
-	}
-
-	public void setGroupList(List<Group> groupList) {
-		this.groupList = groupList;
-	}
-
+	/**
+	 * Contient la liste des utilisateurs, la liste des groupes, document utilisé pour parcourir le fichier XML et noeud Element associé à UserDB
+	 */
 	private List<User> userList = new ArrayList<User>();
 	private List<Group> groupList = new ArrayList<Group>();
 	private Document parserDB;
@@ -62,8 +45,6 @@ public class UserDB extends Node{
 
 	/**
 	 * Constructeur de UserDB.
-	 * <p>
-	 * !!!!!!!!!!!! PENSEZ À AJOUTER UN ADMINISTRATEUR (su par exemple) QUI VOUS PERMETTRA DE CHARGER LA BASE DE DONNÉES AU DEMARRAGE DE L'APPLICATION !!!!!!
 	 *
 	 * @param file Le nom du fichier qui contient la base de données.
 	 */
@@ -94,6 +75,45 @@ public class UserDB extends Node{
 		this.file = file;
 	}
 
+	/**
+	 * Getter de la liste d'utilisateurs
+	 * @return
+	 * 		La liste d'utilisateurs
+	 */
+
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	/**
+	 * Setter de la liste d'utilisateurs
+	 *
+	 * @param userList La nouvelle liste d'utilisateurs
+	 */
+
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+
+	/**
+	 * Getter de la liste de groupes
+	 * @return
+	 * 		La liste de groupes
+	 */
+
+	public List<Group> getGroupList() {
+		return groupList;
+	}
+
+	/**
+	 * Setter de la liste de groupes
+	 *
+	 * @param groupList La nouvelle liste de groupes
+	 */
+
+	public void setGroupList(List<Group> groupList) {
+		this.groupList = groupList;
+	}
 
 	public void loadDB() {
 
@@ -309,7 +329,7 @@ public class UserDB extends Node{
 		for(int i=0; i<groupsList.size();i++){
 			if(groupsList.get(i).getGroupId() == groupId){
 
-					//tous les étudiants qui étaient liés au groupe doivent avoir un groupId à -1
+					//Tous les étudiants qui étaient liés au groupe doivent avoir un groupId à -1
 						List<Student> studentfromGroup = groupsList.get(i).getComposition();
 
 						for(int j=0; j<studentfromGroup.size();j++){

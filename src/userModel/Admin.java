@@ -102,10 +102,11 @@ public class Admin extends User {
     }
 
     /**
-     * Setter de l'ID de l'administrateur modifiant l'Element noeud correspondant
+     * Setter de l'identifiant de l'administrateur modifiant l'Element noeud correspondant
      * @param adminID
      * 		Nouvel identifiant de l'administrateur
      */
+
     public void setAdminID(int adminID) {
         if (this.getNode() != null) {
             try {
@@ -118,10 +119,11 @@ public class Admin extends User {
     }
 
     /**
-     * Getter de l'ID de l'administrateur
+     * Getter de l'identifiant de l'administrateur
      * @return
-     * 		L'ID de l'administrateur
+     * 		L'identifiant de l'administrateur
      */
+
 	public int getAdminID(){
 		return this.adminID;
 	}

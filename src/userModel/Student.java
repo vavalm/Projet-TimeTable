@@ -4,12 +4,44 @@ import org.omg.PortableInterceptor.Interceptor;
 
 
 public class Student extends User{
+
+    /**
+     * Contient un identifiant d'étudiant
+     *
+     */
+
     private int studentID;
+
+    /**
+     * Constructeur d'un utilisateur étudiant
+     *
+     * @param login
+     * 		Login de l'étudiant
+     * @param firstname
+     * 		Prénom de l'étudiant
+     * @param surname
+     * 		Nom de l'étudiant
+     * @param pwd
+     * 		Mot de passe de l'étudiant
+     * @param studentID
+     * 		Identifiant de l'étudiant
+     * @param studentNode
+     * 		Element noeud associé à l'étudiant
+     *
+     */
 
     public Student(String login, String firstname, String surname, String pwd, int studentID, Element studentNode){
         super(login, firstname, surname, pwd, studentNode);
         setStudentID(studentID);
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet étudiant à partir des éléments du noeud étudiant
+     * @param studentNode
+     * 		Element noeud associé à l'étudiant
+     * @return
+     * 		La nouvelle instance d'étudiant
+     */
 
     static Student initWithElement(Element studentNode) {
         try {
@@ -25,6 +57,24 @@ public class Student extends User{
             return null;
         }
     }
+
+    /**
+     * Fonction permettant de créer un nouvel objet étudiant à partir de paramètres choisis par l'utilisateur
+     * @param login
+     * 		Login de l'étudiant
+     * @param firstname
+     * 		Prénom de l'étudiant
+     * @param surname
+     * 		Nom de l'étudiant
+     * @param pwd
+     * 		Mot de passe de l'étudiant
+     * @param studentID
+     * 		Identifiant de l'étudiant
+     * @param parentNode
+     * 		Element noeud parent associé à l'étudiant
+     * @return
+     * 		La nouvelle instance d'étudiant
+     */
 
     static Student initWithoutElement( String login, String firstname, String surname, String pwd, int studentID, Element parentNode) {
         Element studentNode = new Element("Student");
@@ -57,6 +107,12 @@ public class Student extends User{
         return Student.initWithElement(studentNode);
     }
 
+    /**
+     * Setter de l'identifiant de l'étudiant modifiant l'Element noeud correspondant
+     * @param studentID
+     * 		Nouvel identifiant de l'étudiant
+     */
+
     public void setStudentID(int studentID) {
         if (this.getNode() != null) {
             try {
@@ -67,6 +123,12 @@ public class Student extends User{
         }
         this.studentID = studentID;
     }
+
+    /**
+     * Getter de l'identifiant de l'étudiant
+     * @return
+     * 		L'identifiant de l'étudiant
+     */
 
     public int getStudentID(){
         return this.studentID;
