@@ -39,12 +39,14 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public String getTeacherLogin(int timeTableId, int bookId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         return timeTable.getBooks().get(bookId).getTeacherLogin();
     }
 
     @Override
     public String[] roomsIdToString() {
+        this.loadDB();
         Hashtable<Integer, Room> table = tTDB.getRooms();
         String response[] = new String[table.size()];
 
@@ -65,6 +67,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public String[] roomsToString() {
+        this.loadDB();
         Hashtable<Integer, Room> table = tTDB.getRooms();
         String response[] = new String[table.size()];
 
@@ -87,6 +90,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public String[] timeTablesIDToString() {
+        this.loadDB();
         Hashtable<Integer, TimeTable> table = tTDB.getTimesTables();
         String response[] = new String[table.size()];
 
@@ -107,6 +111,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public String[] booksIdToString(int timeTableId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         Enumeration element = timeTable.getBooks().elements();
         String response[] = new String[timeTable.getBooks().size()];
@@ -125,16 +130,19 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean addRoom(int roomId, int capacity) {
+        this.loadDB();
         return this.tTDB.addRoom(roomId, capacity);
     }
 
     @Override
     public boolean removeRoom(int roomId) {
+        this.loadDB();
         return this.tTDB.removeRoom(roomId);
     }
 
     @Override
     public int getRoom(int timeTableId, int bookId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         Book book = timeTable.getBooks().get(bookId);
         if (book != null) {
@@ -145,16 +153,19 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean addTimeTable(int timeTableId) {
+        this.loadDB();
         return this.tTDB.addTimeTable(timeTableId);
     }
 
     @Override
     public boolean removeTimeTable(int timeTableId) {
+        this.loadDB();
         return this.tTDB.removeTimeTable(timeTableId);
     }
 
     @Override
     public boolean addBooking(int timeTableId, int bookingId, String login, Date dateBegin, Date dateEnd, int roomId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         if (timeTable != null) {
             try {
@@ -184,6 +195,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public void getBookingsDate(int timeTableId, Hashtable<Integer, Date> dateBegin, Hashtable<Integer, Date> dateEnd) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         if (timeTable == null) {
             System.out.println("TimeTable does not exist");
@@ -200,6 +212,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public boolean removeBook(int timeTableId, int bookId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         if (timeTable == null) {
             System.out.println("TimeTable does not exist");
@@ -222,6 +235,7 @@ public class TimeTableController implements ITimeTableController {
 
     @Override
     public int getBookingsMaxId(int timeTableId) {
+        this.loadDB();
         TimeTable timeTable = this.tTDB.getTimesTables().get(timeTableId);
         Enumeration element = timeTable.getBooks().elements();
         int maxKey = 0;
