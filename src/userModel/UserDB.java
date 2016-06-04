@@ -118,6 +118,8 @@ public class UserDB extends Node{
 		SAXBuilder sxb = new SAXBuilder();
 		File xmlFile = new File(this.file);
 
+		//On vérifie l'existence du fichier XML
+
 		if(xmlFile.exists()) {
 			try {
 				Document parserDB;
@@ -125,7 +127,8 @@ public class UserDB extends Node{
 				userDBNode = parserDB.getRootElement();
 				this.setNode(userDBNode);
 
-				// Get Students
+				// On charge l'ensemble des étudiants du fichier XML dans la liste d'utilisateurs
+
 				Element studentsNode = userDBNode.getChild("Students");
 				List studentNodes = studentsNode.getChildren("Student");
 				Iterator i = studentNodes.iterator();
@@ -143,8 +146,7 @@ public class UserDB extends Node{
 
 				}
 
-
-				// Get Teachers
+				// On charge l'ensemble des professeurs du fichier XML dans la liste d'utilisateurs
 
 				Element teachersNode = userDBNode.getChild("Teachers");
 				List teacherNodes = teachersNode.getChildren("Teacher");
@@ -160,7 +162,7 @@ public class UserDB extends Node{
 
 				}
 
-				// Get Administrators
+				// On charge l'ensemble des administrateurs du fichier XML dans la liste d'utilisateurs
 
 				Element adminsNode = userDBNode.getChild("Administrators");
 				List adminNodes = adminsNode.getChildren("Administrator");
@@ -176,7 +178,8 @@ public class UserDB extends Node{
 
 				}
 
-				// Get Groups
+				// On charge l'ensemble des groupes du fichier XML dans la liste de groupes
+
 				Element groupsNode = userDBNode.getChild("Groups");
 				List groupNodes = groupsNode.getChildren("Group");
 				Iterator j = groupNodes.iterator();
@@ -201,6 +204,8 @@ public class UserDB extends Node{
 				e.printStackTrace();
 			}
 
+			//Si le fichier XML n'existe pas, on en crée un avec l'arborescence minimale et on y rajoute un administrateur afin de pouvoir au moins se connecter à l'interface
+
 		} else {
 			Document xmlDB = new Document();
 			Element root = new Element("UsersDB");
@@ -221,6 +226,7 @@ public class UserDB extends Node{
 	}
 
 	public void saveDB() {
+
 		try{
 			XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
 			sortie.output(this.getNode().getDocument(), new FileOutputStream(this.getFile()));
@@ -233,14 +239,18 @@ public class UserDB extends Node{
 	public boolean addAdmin(String adminLogin, String newAdminlogin, int adminID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
+
+		//On vérifie si le login n'est pas déjà utilisé par un autre utilisateur
 		for(int i=0;i<AllUsers.size();i++){
 			if(AllUsers.get(i).getLogin().equals(newAdminlogin)){
 				return false;
 			}
 		}
 
+		//On crée un nouvel administrateur à partir des paramètres de la fonction
 		Admin newAdmin = Admin.initWithoutElement(newAdminlogin,firstname,surname,pwd,adminID, this.getNode().getChild("Administrators"));
 
+		//On vérifie que le nouvel administrateur a bien été créé
 		if (newAdmin == null){
 			return false;
 		} else {
@@ -255,14 +265,18 @@ public class UserDB extends Node{
 	public boolean addTeacher(String teacherLogin, String newTeacherlogin, int teacherID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
+
+		//On vérifie si le login n'est pas déjà utilisé par un autre utilisateur
 		for(int i=0;i<AllUsers.size();i++){
 			if(AllUsers.get(i).getLogin().equals(newTeacherlogin)){
 				return false;
 			}
 		}
 
+		//On crée un nouveau professeur à partir des paramètres de la fonction
 		Teacher newTeacher = Teacher.initWithoutElement(newTeacherlogin,firstname,surname,pwd,teacherID, this.getNode().getChild("Teachers"));
 
+		//On vérifie que le nouveau professeur a bien été créé
 		if (newTeacher == null){
 			return false;
 		} else {
@@ -277,15 +291,18 @@ public class UserDB extends Node{
 	public boolean addStudent(String studentLogin, String newStudentlogin, int studentID, String firstname, String surname, String pwd) {
 
 		List<User> AllUsers = this.getUserList();
+
+		//On vérifie si le login n'est pas déjà utilisé par un autre utilisateur
 		for(int i=0;i<AllUsers.size();i++){
 			if(AllUsers.get(i).getLogin().equals(newStudentlogin)){
-				System.out.println("ET BAH NON Cet ELV EXISTE DEJA");
 				return false;
 			}
 		}
 
+		//On crée un nouvel étudiant à partir des paramètres de la fonction
 		Student newStudent = Student.initWithoutElement(newStudentlogin,firstname,surname,pwd,studentID, this.getNode().getChild("Students"));
 
+		//On vérifie que le nouvel étudiant a bien été créé
 		if (newStudent == null){
 			return false;
 		} else {
@@ -299,15 +316,18 @@ public class UserDB extends Node{
 	public boolean addGroup(String adminLogin, int groupId) {
 
 		List<Group> AllGroups = this.getGroupList();
+
+		//On vérifie si l'identifiant de groupe n'est pas déjà utilisé par un autre groupe
 		for(int i=0;i<AllGroups.size();i++){
 			if(AllGroups.get(i).getGroupId() == groupId){
 				return false;
 			}
 		}
 
-
+		//On crée un nouveau groupe à partir des paramètres de la fonction
 		Group newGroup = Group.initWithoutElement(groupId, this.getNode().getChild("Groups"));
 
+		//On vérifie que le nouveau groupe a bien été créé
 		if (newGroup == null){
 			return false;
 		} else {
@@ -324,11 +344,13 @@ public class UserDB extends Node{
 		List<User> usersList = this.getUserList();
 
 		for(int i=0; i<groupsList.size();i++){
+
+			//On parcourt la liste des groupes pour voir si l'identifiant de groupe recherché correspond à un identifiant existant
 			if(groupsList.get(i).getGroupId() == groupId){
 
-					//Tous les étudiants qui étaient liés au groupe doivent avoir un groupId à -1
 						List<Student> studentfromGroup = groupsList.get(i).getComposition();
 
+						//On parcourt la liste des étudiants appartenant au groupe recherché pour remettre leur identifiant de groupe à "-1" et pour les supprimer de cette liste
 						for(int j=0; j<studentfromGroup.size();j++){
 							if(studentfromGroup.get(j) != null) {
 								studentfromGroup.get(j).getNode().getChild("groupId").setText("-1");
@@ -339,7 +361,7 @@ public class UserDB extends Node{
 						}
 
 
-
+				//On supprime le groupe à la fois du XML et de la liste de groupes
 				this.getNode().getChild("Groups").removeContent(groupsList.get(i).getNode());
 				groupsList.remove(i);
 				this.saveDB();
@@ -353,8 +375,11 @@ public class UserDB extends Node{
 	public boolean associateStudToGroup(String adminLogin, String studentLogin, int groupId){
 		List<User> usersList = this.getUserList();
 
+		//On parcourt la liste des utilisateurs
 
 		for(int i=0; i<usersList.size();i++){
+
+			//On vérifie que le login que l'on veut lier correspond bien à un login existant et que l'utilisateur ayant ce login est bien un étudiant
 
 			if(usersList.get(i).getLogin().equals(studentLogin)){
 
@@ -362,14 +387,20 @@ public class UserDB extends Node{
 
 					List<Group> groupsList = this.getGroupList();
 
+					//On recherche dans la liste de groupes si il y en a un dont l'identifiant correspond bien à celui que l'on souhaite lier
 					for (int j = 0; j < groupsList.size(); j++) {
 						if (groupsList.get(j).getGroupId() == (groupId)) {
 
+							//On récupère la liste des étudiants qui compose le groupe recherché
 							List<Student> composition = groupsList.get(j).getComposition();
 
+							//On rajoute l'étudiant recherché à la liste d'étudiants qui compose le groupe recherché
 							composition.add((Student)usersList.get(i));
+
+							//On incrémente le nombre d'étudiants appartenant au groupe recherché
 							groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()+1);
-							// Accède au node du student et modifie le champ groupId avec le nouveau
+
+							// On accède au node du student et modifie son identifiant de groupe par le nouveau
 							usersList.get(i).getNode().getChild("groupId").setText(Integer.toString(groupId));
 							this.saveDB();
 							return true;
@@ -391,34 +422,41 @@ public class UserDB extends Node{
 		List<User> usersList = this.getUserList();
 
 		for(int i=0; i<usersList.size();i++){
+
+			//On vérifie que le login de l'utilisateur que l'on souhaite supprimer correspond bien à un login existant
 			if(usersList.get(i).getLogin().equals(userLogin)){
 
-				// Si suppression d'un Student, supprimer de son groupe
+				//On vérifie si l'utilisateur est un étudiant afin de le supprimer de son groupe et de le retrouver dans le XML
 				if(usersList.get(i).getClass().equals(Student.class)){
 					List<Group> groupsList = this.getGroupList();
 					for(int j=0; j<groupsList.size();j++){
+						//On récupère la liste d'étudiants de chaque groupe existant
 						List<Student> composition = groupsList.get(j).getComposition();
 						for(int k=0; k<composition.size(); k++){
+							//On regarde si le login recherché correspond à l'un des étudiants d'un des groupes
 							if(composition.get(k).getLogin().equals(userLogin)){
+								//On supprime l'étudiant de la liste de son groupe et on décrémente le nombre d'étudiants de ce groupe
 								composition.remove(k);
 								groupsList.get(j).setStudentNumber(groupsList.get(j).getStudentNumber()-1);
 							}
 
 						}
 					}
-
+					//On supprime l'étudiant du XML
 					this.getNode().getChild("Students").removeContent(usersList.get(i).getNode());
 
 
-
+				//On vérifie si l'utilisateur est un professeur afin de le retrouver dans le XML
 				}else if(usersList.get(i).getClass().equals(Teacher.class)){
-
+					//On supprime le professeur du XML
 					this.getNode().getChild("Teachers").removeContent(usersList.get(i).getNode());
 
+				//On vérifie si l'utilisateur est un administrateur afin de le retrouver dans le XML
 				}else if(usersList.get(i).getClass().equals(Admin.class)){
-
+					//On supprime l'administrateur du XML
 					this.getNode().getChild("Administrators").removeContent(usersList.get(i).getNode());
 				}
+				//On supprime l'utilisateur de la liste d'utilisateurs
 				usersList.remove(i);
 				this.saveDB();
 				return true;
