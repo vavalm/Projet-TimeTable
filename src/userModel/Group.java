@@ -9,11 +9,24 @@ import java.util.List;
 public class Group extends Node {
 
     /**
-     * Contient un identifiant de groupe, un nombre d'étudiants ainsi que la liste d'étudiants composant le groupe
+     * Contient un identifiant de groupe
      *
      */
+
     private int groupId;
+
+    /**
+     * Contient un nombre d'étudiants
+     *
+     */
+
     private int studentNumber;
+
+    /**
+     * Contient la liste d'étudiants composant le groupe
+     *
+     */
+
     private List<Student> composition;
 
     /**
