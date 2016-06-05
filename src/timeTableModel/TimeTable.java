@@ -28,6 +28,7 @@ public class TimeTable extends Node {
      * Le constructeur de TimeTable
      *
      * @param timeTableID L'identifiant de TimeTable
+     * @param timeTableNode L'élément xml de l'emploi du temps
      */
     public TimeTable(int timeTableID, Element timeTableNode) {
         super(timeTableNode);

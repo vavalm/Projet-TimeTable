@@ -35,7 +35,7 @@ public class Node {
     /**
      * Getter de Node
      * @return
-     *      L'élément xml du Node
+     *      L'élément xml du node
      */
     public Element getNode() {
         return node;
@@ -44,7 +44,7 @@ public class Node {
     /**
      * Setter de Node
      * @param node
-     *      L'élément xml du Node
+     *      L'élément xml du node
      */
     public void setNode(Element node) {
         this.node = node;
