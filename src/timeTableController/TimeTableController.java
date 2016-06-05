@@ -16,7 +16,7 @@ import timeTableModel.TimeTableDB;
  * Elle contient un attribut correspondant à la base de données d'emplois du temps que vous allez créer.
  * Elle contient toutes les fonctions de l'interface ITimeTableController que vous devez implémenter.
  *
- * @author Valentin Maupin, Jose Mennesson & Quentin Solard
+ * @author Valentin Maupin, Jose Mennesson et Quentin Solard
  * @version 05/2016
  */
 
@@ -117,7 +117,7 @@ public class TimeTableController implements ITimeTableController {
         String response[] = new String[timeTable.getBooks().size()];
         int i = 0;
         while (element.hasMoreElements()) {
-            Book r = (Book)element.nextElement();
+            Book r = (Book) element.nextElement();
             try {
                 response[i] = Integer.toString(r.getBookID());
                 i++;
@@ -131,13 +131,37 @@ public class TimeTableController implements ITimeTableController {
     @Override
     public boolean addRoom(int roomId, int capacity) {
         this.loadDB();
-        return this.tTDB.addRoom(roomId, capacity);
+        if (this.tTDB.getRooms().get(roomId) != null) {
+            System.out.println("RoomId already in use");
+            return false;
+        }
+        try {
+            Room newRoom = Room.initWithoutElement(roomId, capacity, this.tTDB.getNode().getChild("Rooms"));
+            if (newRoom == null) {
+                return false;
+            } else {
+                this.tTDB.getRooms().put(roomId, newRoom);
+                this.saveDB();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean removeRoom(int roomId) {
         this.loadDB();
-        return this.tTDB.removeRoom(roomId);
+        Room room = this.tTDB.getRooms().remove(roomId);
+        if (room == null) {
+            System.out.println("Room does not exist");
+            return false;
+        } else {
+            this.tTDB.getNode().getChild("Rooms").removeContent(room.getNode());
+            this.saveDB();
+            return true;
+        }
     }
 
     @Override
@@ -154,13 +178,36 @@ public class TimeTableController implements ITimeTableController {
     @Override
     public boolean addTimeTable(int timeTableId) {
         this.loadDB();
-        return this.tTDB.addTimeTable(timeTableId);
+        if (this.tTDB.getTimesTables().get(timeTableId) != null) {
+            System.out.println("TimeTableId is already in use");
+            return false;
+        }
+        try {
+            TimeTable newTimeTable = TimeTable.initWithoutElement(timeTableId, this.tTDB.getNode().getChild("TimeTables"));
+            if (newTimeTable == null) {
+                return false;
+            } else {
+                this.tTDB.getTimesTables().put(timeTableId, newTimeTable);
+                this.saveDB();
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
     public boolean removeTimeTable(int timeTableId) {
         this.loadDB();
-        return this.tTDB.removeTimeTable(timeTableId);
+        TimeTable timeTable = this.tTDB.getTimesTables().remove(timeTableId);
+        if (timeTable == null) {
+            return false;
+        } else {
+            this.tTDB.getNode().getChild("TimeTables").removeContent(timeTable.getNode());
+            this.saveDB();
+            return true;
+        }
     }
 
     @Override
@@ -174,9 +221,18 @@ public class TimeTableController implements ITimeTableController {
                     System.out.println("BookingId already in use");
                     return false;
                 }
+
+                // on vérifie si la salle n'est pas déjà réservée à la même date
+                // on vérifie également que la plage horaire n'est pas déjà occupée dans l'emploi du temps
+                if (timeTable.isDateRangeOverlapping(dateBegin, dateEnd)
+                        || this.tTDB.isRoomInDateRangeAlreadyUsed(dateBegin, dateEnd, roomId)) {
+                    return false;
+                }
+
                 Book newBook = Book.initWithoutElement(bookingId, login, dateBegin, dateEnd, roomId, booksNode);
                 if (newBook != null) {
                     this.tTDB.getTimesTables().get(timeTableId).getBooks().put(bookingId, newBook);
+                    this.saveDB();
                     return true;
                 } else {
                     return false;
@@ -204,7 +260,7 @@ public class TimeTableController implements ITimeTableController {
         Hashtable<Integer, Book> books = timeTable.getBooks();
         Enumeration element = books.elements();
         while (element.hasMoreElements()) {
-            Book book = (Book)element.nextElement();
+            Book book = (Book) element.nextElement();
             dateBegin.put(book.getBookID(), book.getBeginDate());
             dateEnd.put(book.getBookID(), book.getEndDate());
         }
@@ -226,6 +282,7 @@ public class TimeTableController implements ITimeTableController {
         timeTable.getBooks().remove(bookId);
         try {
             timeTable.getNode().getChild("Books").removeContent(book.getNode());
+            this.saveDB();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -240,7 +297,7 @@ public class TimeTableController implements ITimeTableController {
         Enumeration element = timeTable.getBooks().elements();
         int maxKey = 0;
         while (element.hasMoreElements()) {
-            Book r = (Book)element.nextElement();
+            Book r = (Book) element.nextElement();
             if (r.getBookID() > maxKey) {
                 maxKey = r.getBookID();
             }
