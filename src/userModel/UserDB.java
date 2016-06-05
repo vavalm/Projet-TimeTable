@@ -127,6 +127,24 @@ public class UserDB extends Node{
 				userDBNode = parserDB.getRootElement();
 				this.setNode(userDBNode);
 
+				// On charge l'ensemble des groupes du fichier XML dans la liste de groupes
+
+				Element groupsNode = userDBNode.getChild("Groups");
+				List groupNodes = groupsNode.getChildren("Group");
+				Iterator j = groupNodes.iterator();
+				while (j.hasNext()) {
+					Element groupNode = (Element) j.next();
+
+					Group newGroup = Group.initWithElement(groupNode);
+
+					if (newGroup != null) {
+						this.groupList.add(newGroup);
+
+					} else {
+						System.out.println("Group attribute missing");
+					}
+				}
+
 				// On charge l'ensemble des étudiants du fichier XML dans la liste d'utilisateurs
 
 				Element studentsNode = userDBNode.getChild("Students");
@@ -138,6 +156,14 @@ public class UserDB extends Node{
 					Student newStudent = Student.initWithElement(studentNode);
 
 					if (newStudent != null) {
+                        Iterator groupListIt = this.getGroupList().iterator();
+                        while (groupListIt.hasNext()) {
+                            Group group = (Group)groupListIt.next();
+                            if (group.getGroupId() == newStudent.getGroupID()) {
+                                group.getComposition().add(newStudent);
+                            }
+                        }
+
 						this.userList.add(newStudent);
 
 					} else {
@@ -178,24 +204,7 @@ public class UserDB extends Node{
 
 				}
 
-				// On charge l'ensemble des groupes du fichier XML dans la liste de groupes
 
-				Element groupsNode = userDBNode.getChild("Groups");
-				List groupNodes = groupsNode.getChildren("Group");
-				Iterator j = groupNodes.iterator();
-				while (j.hasNext()) {
-					Element groupNode = (Element) j.next();
-
-					Group newGroup = Group.initWithElement(groupNode);
-
-					if (newGroup != null) {
-						this.groupList.add(newGroup);
-
-					} else {
-						System.out.println("Group attribute missing");
-					}
-
-				}
 
 
 			} catch (JDOMException e) {

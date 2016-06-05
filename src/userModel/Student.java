@@ -5,12 +5,9 @@ import org.omg.PortableInterceptor.Interceptor;
 
 public class Student extends User{
 
-    /**
-     * Contient un identifiant d'étudiant
-     *
-     */
-
     private int studentID;
+
+    private int groupID;
 
     /**
      * Constructeur d'un utilisateur étudiant
@@ -49,9 +46,11 @@ public class Student extends User{
             String firstname =  studentNode.getChildText("firstname");
             String surname = studentNode.getChildText("surname");
             String pwd = studentNode.getChildText("pwd");
+            int groupID = Integer.parseInt(studentNode.getChildText("groupId"));
             int studentID = Integer.parseInt(studentNode.getChildText("studentId"));
-
-            return new Student(login, firstname, surname, pwd, studentID, studentNode);
+            Student newStudent = new Student(login, firstname, surname, pwd, studentID, studentNode);
+            newStudent.setGroupID(groupID);
+            return newStudent;
 
         } catch (Exception e) {
             return null;
@@ -125,6 +124,9 @@ public class Student extends User{
     }
 
     /**
+     * Contient un identifiant d'étudiant
+     *
+     */ /**
      * Getter de l'identifiant de l'étudiant
      * @return
      * 		L'identifiant de l'étudiant
@@ -134,4 +136,14 @@ public class Student extends User{
         return this.studentID;
     }
 
+    /**
+     * Contient l'identifiant du groupe auquel l'élève appartient
+     */
+    public int getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(int groupID) {
+        this.groupID = groupID;
+    }
 }
