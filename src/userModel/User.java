@@ -6,13 +6,31 @@ import org.jdom2.Element;
 public class User extends Node {
 
 	/**
-	 * Contient un login, un nom, un prénom et un mot de passe
+	 * Contient un login
 	 *
 	 */
 
 	private String login;
+
+	/**
+	 * Contient un prénom
+	 *
+	 */
+
 	private String firstname;
+
+	/**
+	 * Contient un nom
+	 *
+	 */
+
 	private String surname;
+
+	/**
+	 * Contient un mot de passe
+	 *
+	 */
+
 	private String pwd;
 
 	/**
