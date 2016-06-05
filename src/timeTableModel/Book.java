@@ -75,6 +75,7 @@ public class Book extends Node {
             int roomId = Integer.parseInt(bookNode.getChildText("RoomId"));
             return new Book(bookingId, login, begin, end, roomId, bookNode);
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -91,6 +92,10 @@ public class Book extends Node {
     public static Book initWithoutElement(int bookID, String teacherLogin, Date beginDate, Date endDate, int roomId, Element parentNode) {
         Element bookNode = new Element("Book");
         parentNode.addContent(bookNode);
+
+        Element bookIDNode = new Element("BookingId");
+        bookIDNode.setText(Integer.toString(bookID));
+        bookNode.addContent(bookIDNode);
 
         Element loginNode = new Element("Login");
         loginNode.setText(teacherLogin);

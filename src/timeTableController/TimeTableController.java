@@ -223,9 +223,14 @@ public class TimeTableController implements ITimeTableController {
                 }
 
                 // on vérifie si la salle n'est pas déjà réservée à la même date
+                if (this.tTDB.isRoomInDateRangeAlreadyUsed(dateBegin, dateEnd, roomId)) {
+                    System.out.println("Salle déjà utilisée");
+                    return false;
+                }
+
                 // on vérifie également que la plage horaire n'est pas déjà occupée dans l'emploi du temps
-                if (timeTable.isDateRangeOverlapping(dateBegin, dateEnd)
-                        || this.tTDB.isRoomInDateRangeAlreadyUsed(dateBegin, dateEnd, roomId)) {
+                if (timeTable.isDateRangeOverlapping(dateBegin, dateEnd)) {
+                    System.out.println("Plage horaire déjà utilisée");
                     return false;
                 }
 
@@ -235,6 +240,7 @@ public class TimeTableController implements ITimeTableController {
                     this.saveDB();
                     return true;
                 } else {
+                    System.out.println("Erreur lors de l'initialisation de la réservation");
                     return false;
                 }
             } catch (Exception e) {
@@ -302,7 +308,7 @@ public class TimeTableController implements ITimeTableController {
                 maxKey = r.getBookID();
             }
         }
-        return maxKey;
+        return maxKey + 1;
     }
 
     @Override
