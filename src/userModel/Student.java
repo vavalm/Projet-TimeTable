@@ -137,12 +137,19 @@ public class Student extends User{
     }
 
     /**
-     * Contient l'identifiant du groupe auquel l'élève appartient
+     * Getter de groupID
+     * @return
+     *      L'identifiant du goupe auquel appartient l'étudiant
      */
     public int getGroupID() {
         return groupID;
     }
 
+    /**
+     * Setter de groupID
+     * @param groupID
+     *      L'identifiant du goupe auquel appartient l'étudiant
+     */
     public void setGroupID(int groupID) {
         this.groupID = groupID;
     }
